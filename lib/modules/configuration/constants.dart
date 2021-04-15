@@ -1,1 +1,1 @@
-final String BASE_URL = "https://cubipool-nest.herokuapp.com/api";
+const String BASE_URL = "https://cubipool-nest.herokuapp.com";

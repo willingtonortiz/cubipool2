@@ -9,17 +9,17 @@ class Post {
   final String body;
 
   Post({
-    @required this.userId,
-    @required this.id,
-    @required this.title,
-    @required this.body,
+    required this.userId,
+    required this.id,
+    required this.title,
+    required this.body,
   });
 
   Post copyWith({
-    int userId,
-    int id,
-    String title,
-    String body,
+    int? userId,
+    int? id,
+    String? title,
+    String? body,
   }) {
     return Post(
       userId: userId ?? this.userId,
@@ -102,7 +102,7 @@ class _DioExamplePageState extends State<DioExamplePage> {
       Response<List> response =
           await Dio().get<List>('https://jsonplaceholder.typicode.com/posts');
 
-      final posts = response.data.map((e) => Post.fromMap(e)).toList();
+      final posts = response.data!.map((e) => Post.fromMap(e)).toList();
       posts.forEach((e) => print(e.toJson()));
     } catch (e) {
       print(e);

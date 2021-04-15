@@ -1,4 +1,5 @@
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
+import 'package:cubipool2/modules/auth/services/jwt_service.dart';
 import 'package:cubipool2/modules/common/validators/widgets/username_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,15 +7,15 @@ import 'package:flutter/material.dart';
 class LoginPage extends StatefulWidget {
   static const PAGE_ROUTE = '/auth/login';
 
-  LoginPage({Key key}) : super(key: key);
+  LoginPage({Key? key}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String _username;
-  String _password;
+  String? _username;
+  String? _password;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -25,24 +26,7 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                width: double.infinity,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      child: Image.asset(
-                        'assets/items/login_background.png',
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    Image.asset(
-                      'assets/logos/upc_logo.png',
-                    ),
-                  ],
-                ),
-              ),
+              _buildHeader(),
               Form(
                 key: _formKey,
                 child: Padding(
@@ -54,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
                       _buildPassword(),
                       const SizedBox(height: 60.0),
                       _buildLoginButton(),
-                      const SizedBox(height: 8.0),
+                      const SizedBox(height: 16.0),
                       _buildRegisterButton(),
                     ],
                   ),
@@ -67,13 +51,36 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _buildHeader() {
+    return Container(
+      width: double.infinity,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: double.infinity,
+            child: Image.asset(
+              'assets/items/login_background.png',
+              fit: BoxFit.fill,
+            ),
+          ),
+          Image.asset(
+            'assets/logos/upc_logo.png',
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildUsername() {
     return TextFormField(
       decoration: InputDecoration(
         labelText: 'Código de alumno',
         prefixIcon: Icon(Icons.person),
       ),
-      validator: (String value) {
+      validator: (String? value) {
+        value = value ?? '';
+
         if (value.isEmpty) {
           return 'El código de alumno es requerido';
         }
@@ -82,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
         }
         return null;
       },
-      onSaved: (String value) {
+      onSaved: (String? value) {
         _username = value;
       },
     );
@@ -95,13 +102,15 @@ class _LoginPageState extends State<LoginPage> {
         prefixIcon: Icon(Icons.lock),
       ),
       obscureText: true,
-      validator: (String value) {
+      validator: (String? value) {
+        value = value ?? '';
+
         if (value.isEmpty) {
           return 'El código de alumno es requerido';
         }
         return null;
       },
-      onSaved: (String value) {
+      onSaved: (String? value) {
         _password = value;
       },
     );
@@ -110,12 +119,13 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildLoginButton() {
     return ElevatedButton(
       onPressed: () async {
-        final isValid = _formKey.currentState.validate();
+        final isValid = _formKey.currentState!.validate();
         if (!isValid) {
           return;
         }
-        _formKey.currentState.save();
-        loginUser(_username, _password);
+
+        _formKey.currentState!.save();
+        loginUser(_username!, _password!);
       },
       child: Text('Iniciar sesión'),
     );
@@ -132,10 +142,11 @@ class _LoginPageState extends State<LoginPage> {
 
   void loginUser(String username, String password) async {
     try {
-      final token = await AuthHttpService.login(username, password);
-      print(token);
+      final response = await AuthHttpService.login(username, password);
+      final jwtService = JwtService();
+      await jwtService.saveToken(response.jwt);
+      Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
-      print(e);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Ocurrió un error'),
