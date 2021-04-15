@@ -34,6 +34,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: primaryColor,
         accentColor: accentColor,
+        appBarTheme: AppBarTheme(
+          centerTitle: true,
+        ),
         textTheme: TextTheme(
           bodyText2: TextStyle(fontSize: 14.0),
         ),
@@ -50,7 +53,7 @@ class MyApp extends StatelessWidget {
               vertical: 12.0,
             ),
             textStyle: TextStyle(
-              fontSize: 20.0,
+              fontSize: 18.0,
             ),
           ),
         ),

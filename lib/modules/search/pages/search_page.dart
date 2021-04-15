@@ -11,6 +11,9 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Reservar cubículos'),
+      ),
       body: SafeArea(
         child: Column(
           children: [
