@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
         value = value ?? '';
 
         if (value.isEmpty) {
-          return 'El código de alumno es requerido';
+          return 'La contraseña es requerida';
         }
         return null;
       },
@@ -135,12 +135,12 @@ class _LoginPageState extends State<LoginPage> {
     return GestureDetector(
       child: Text('¿No tienes cuenta?, Regístrate'),
       onTap: () {
-        Navigator.pushReplacementNamed(context, '/auth/register');
+        Navigator.pushNamed(context, '/auth/register');
       },
     );
   }
 
-  void loginUser(String username, String password) async {
+  Future<void> loginUser(String username, String password) async {
     try {
       final response = await AuthHttpService.login(username, password);
       final jwtService = JwtService();

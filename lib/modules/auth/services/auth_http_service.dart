@@ -48,25 +48,20 @@ class AuthHttpService {
     }
   }
 
-  static Future<String> register(
+  static Future<void> register(
     String username,
     String password,
   ) async {
     try {
-      Response response = await Dio().post(
-        '$BASE_URL/auth/login',
-        data: {
-          username: username,
-          password: password,
-        },
-      );
-      print(response.statusCode);
+      final registerUrl = '$BASE_URL/auth/register';
 
-      if (response.statusCode == HttpStatus.ok) {
-        return 'token';
-      }
-      print(response.statusCode);
-      return 'NOT OK';
+      await Dio().post(
+        registerUrl,
+        data: jsonEncode({
+          "username": username,
+          "password": password,
+        }),
+      );
     } catch (e) {
       throw e;
     }
