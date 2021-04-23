@@ -12,15 +12,12 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reservar cubículos'),
+        title: Text('Búsqueda cubículos'),
       ),
       body: SafeArea(
         child: Column(
           children: [
-            Text(
-              'NEW PAGE!',
-              style: TextStyle(fontSize: 32.0),
-            ),
+            Text('Búsqueda'),
           ],
         ),
       ),

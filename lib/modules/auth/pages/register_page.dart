@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
+
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
 import 'package:cubipool2/modules/common/validators/widgets/username_validator.dart';
-import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
   static const PAGE_ROUTE = '/auth/register';
@@ -13,7 +14,6 @@ class _RegisterPageState extends State<RegisterPage> {
   String? _username;
   String? _password;
   final _passwordController = TextEditingController();
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override

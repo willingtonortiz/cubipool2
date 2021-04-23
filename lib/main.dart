@@ -1,9 +1,9 @@
-import 'package:cubipool2/modules/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:cubipool2/modules/home/pages/home_page.dart';
 import 'package:cubipool2/modules/auth/pages/login_page.dart';
 import 'package:cubipool2/modules/auth/pages/register_page.dart';
 import 'package:cubipool2/modules/examples/pages/dio_example_page.dart';
@@ -56,6 +56,12 @@ class MyApp extends StatelessWidget {
               fontSize: 18.0,
             ),
           ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(primary: primaryColor),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(primary: primaryColor),
         ),
       ),
       debugShowCheckedModeBanner: false,
