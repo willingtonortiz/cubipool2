@@ -1,6 +1,7 @@
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
 import 'package:cubipool2/modules/auth/services/jwt_service.dart';
 import 'package:cubipool2/modules/common/validators/widgets/username_validator.dart';
+import 'package:cubipool2/modules/shared/models/response_error.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String? _username;
   String? _password;
+  bool _isLoading = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -133,18 +135,24 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildLoginButton() {
-    return ElevatedButton(
-      onPressed: () async {
-        final isValid = _formKey.currentState!.validate();
-        if (!isValid) {
-          return;
-        }
+    return !_isLoading
+        ? ElevatedButton(
+            onPressed: () async {
+              final isValid = _formKey.currentState!.validate();
+              if (!isValid) {
+                return;
+              }
 
-        _formKey.currentState!.save();
-        loginUser(_username!, _password!);
-      },
-      child: Text('Iniciar sesión'),
-    );
+              setState(() {
+                _isLoading = true;
+              });
+
+              _formKey.currentState!.save();
+              await loginUser(_username!, _password!);
+            },
+            child: Text('Iniciar sesión'),
+          )
+        : CircularProgressIndicator();
   }
 
   Widget _buildRegisterButton() {
@@ -162,11 +170,12 @@ class _LoginPageState extends State<LoginPage> {
       final jwtService = JwtService();
       await jwtService.saveToken(response.jwt);
       Navigator.pushReplacementNamed(context, '/home');
-    } catch (e) {
+    } on ResponseError catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Ocurrió un error'),
-        ),
+        SnackBar(content: Text(error.firstError)),
       );
     }
   }

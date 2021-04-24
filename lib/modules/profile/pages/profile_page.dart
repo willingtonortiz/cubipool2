@@ -1,3 +1,5 @@
+import 'package:cubipool2/modules/auth/pages/login_page.dart';
+import 'package:cubipool2/modules/auth/services/jwt_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cubipool2/modules/shared/pages/qr_code_viewer_page.dart';
@@ -30,11 +32,21 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: scanQRCode,
                 child: Text('Escanear Código QR'),
               ),
+              ElevatedButton(
+                onPressed: logout,
+                child: Text('Cerrar sesión'),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void logout() {
+    final jwtService = JwtService();
+    jwtService.removeToken();
+    Navigator.pushReplacementNamed(context, LoginPage.PAGE_ROUTE);
   }
 
   void showQRCode() {

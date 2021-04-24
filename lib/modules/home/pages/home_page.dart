@@ -1,4 +1,5 @@
-import 'package:cubipool2/modules/auth/services/jwt_service.dart';
+import 'package:cubipool2/modules/reservation/pages/reservation_results_page.dart';
+import 'package:cubipool2/modules/shared/pages/not_found_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
@@ -18,13 +19,6 @@ class _HomePageState extends State<HomePage> {
   PageController _pageController = PageController(initialPage: 0);
   int currentIndex = 0;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   final jwtService = JwtService();
-  //   jwtService.removeToken();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +31,13 @@ class _HomePageState extends State<HomePage> {
           });
         },
         children: [
-          ReservationPage(),
+          ReservationResultsPage(),
+          // NotFoundPage(
+          //   message: 'No se encontraron cubiculos disponibles',
+          //   imageUrl:
+          //       'https://cdn.discordapp.com/attachments/823716132732403712/835549753865273384/b00ba99ad82a972d4e5a481385d8e52e.png',
+          // ),
+          // ReservationPage(),
           SearchPage(),
           ProfilePage(),
         ],

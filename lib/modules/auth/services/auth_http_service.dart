@@ -1,7 +1,8 @@
+import 'dart:io';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-import 'package:dio/dio.dart';
-
+import 'package:cubipool2/modules/shared/models/response_error.dart';
 import 'package:cubipool2/modules/configuration/constants.dart';
 
 class LoginResponseBody {
@@ -30,39 +31,39 @@ class AuthHttpService {
     String username,
     String password,
   ) async {
-    try {
-      final loginUrl = '$BASE_URL/auth/login';
+    final loginUrl = Uri.parse('$BASE_URL/auth/login');
+    final response = await http.post(
+      loginUrl,
+      body: {
+        "username": username,
+        "password": password,
+      },
+    );
 
-      Response response = await Dio().post(
-        loginUrl,
-        data: jsonEncode({
-          "username": username,
-          "password": password,
-        }),
-      );
-
-      return LoginResponseBody.fromMap(response.data);
-    } catch (e) {
-      throw e;
+    if (response.statusCode != HttpStatus.created) {
+      final responseError = ResponseError.fromMap(jsonDecode(response.body));
+      throw responseError;
     }
+
+    return LoginResponseBody.fromMap(jsonDecode(response.body));
   }
 
   static Future<void> register(
     String username,
     String password,
   ) async {
-    try {
-      final registerUrl = '$BASE_URL/auth/register';
+    final registerUrl = Uri.parse('$BASE_URL/auth/register');
+    final response = await http.post(
+      registerUrl,
+      body: {
+        "username": username,
+        "password": password,
+      },
+    );
 
-      await Dio().post(
-        registerUrl,
-        data: jsonEncode({
-          "username": username,
-          "password": password,
-        }),
-      );
-    } catch (e) {
-      throw e;
+    if (response.statusCode != HttpStatus.created) {
+      final responseError = ResponseError.fromMap(jsonDecode(response.body));
+      throw responseError;
     }
   }
 }

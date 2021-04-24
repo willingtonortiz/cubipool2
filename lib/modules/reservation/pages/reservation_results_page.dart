@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 
-class ReservationResults extends StatefulWidget {
-  ReservationResults({Key? key}) : super(key: key);
+class ReservationResultsPage extends StatefulWidget {
+  ReservationResultsPage({Key? key}) : super(key: key);
 
   @override
-  _ReservationResultsState createState() => _ReservationResultsState();
+  _ReservationResultsPageState createState() => _ReservationResultsPageState();
 }
 
-class _ReservationResultsState extends State<ReservationResults> {
+class _ReservationResultsPageState extends State<ReservationResultsPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Resultado de búsqueda'),
+      ),
+      body: SafeArea(
+        child: Container(),
+      ),
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cubipool2/modules/shared/models/response_error.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
@@ -13,6 +14,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   String? _username;
   String? _password;
+  bool _isLoading = false;
   final _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -124,18 +126,22 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _buildRegisterButton() {
-    return ElevatedButton(
-      onPressed: () async {
-        final isValid = _formKey.currentState!.validate();
-        if (!isValid) {
-          return;
-        }
-
-        _formKey.currentState!.save();
-        registerUser(_username!, _password!);
-      },
-      child: Text('Registrarse'),
-    );
+    return !_isLoading
+        ? ElevatedButton(
+            onPressed: () async {
+              final isValid = _formKey.currentState!.validate();
+              if (!isValid) {
+                return;
+              }
+              setState(() {
+                _isLoading = true;
+              });
+              _formKey.currentState!.save();
+              await registerUser(_username!, _password!);
+            },
+            child: Text('Registrarse'),
+          )
+        : CircularProgressIndicator();
   }
 
   Future<void> registerUser(String username, String password) async {
@@ -150,11 +156,13 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
       Navigator.of(context).pop();
-    } catch (e) {
+    } on ResponseError catch (error) {
+      print(error);
+      setState(() {
+        _isLoading = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Ocurrió un error'),
-        ),
+        SnackBar(content: Text(error.firstError)),
       );
     }
   }
