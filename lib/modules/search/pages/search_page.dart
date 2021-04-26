@@ -16,9 +16,7 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: SafeArea(
         child: Column(
-          children: [
-            Text('Búsqueda'),
-          ],
+          children: [],
         ),
       ),
     );

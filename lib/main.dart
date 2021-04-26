@@ -6,7 +6,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:cubipool2/modules/home/pages/home_page.dart';
 import 'package:cubipool2/modules/auth/pages/login_page.dart';
 import 'package:cubipool2/modules/auth/pages/register_page.dart';
-import 'package:cubipool2/modules/examples/pages/dio_example_page.dart';
 import 'package:cubipool2/modules/examples/pages/qr_example_page.dart';
 import 'package:cubipool2/modules/examples/pages/riverpod_example_page.dart';
 
@@ -74,7 +73,6 @@ class MyApp extends StatelessWidget {
         // Examples
         QrExamplePage.PAGE_ROUTE: (context) => QrExamplePage(),
         RiverpodExampleAPage.PAGE_ROUTE: (context) => RiverpodExampleAPage(),
-        DioExamplePage.PAGE_ROUTE: (context) => DioExamplePage(),
       },
     );
   }
