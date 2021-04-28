@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'injection_container.dart' as di;
 import 'package:cubipool2/modules/home/pages/home_page.dart';
 import 'package:cubipool2/modules/auth/pages/login_page.dart';
 import 'package:cubipool2/modules/auth/pages/register_page.dart';
@@ -11,6 +12,7 @@ import 'package:cubipool2/modules/examples/pages/riverpod_example_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
 
   final dir = await getApplicationDocumentsDirectory();
   Hive.init(dir.path);

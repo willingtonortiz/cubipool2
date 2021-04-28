@@ -1,6 +1,7 @@
-import 'package:cubipool2/modules/shared/widgets/async_confirmation_dialog.dart';
-import 'package:cubipool2/modules/shared/widgets/notification_dialog.dart';
 import 'package:flutter/material.dart';
+
+import 'package:cubipool2/shared/widgets/async_confirmation_dialog.dart';
+import 'package:cubipool2/shared/widgets/notification_dialog.dart';
 
 class ReservationResultsPage extends StatefulWidget {
   ReservationResultsPage({Key? key}) : super(key: key);

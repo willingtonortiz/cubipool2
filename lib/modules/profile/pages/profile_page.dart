@@ -1,9 +1,9 @@
-import 'package:cubipool2/modules/auth/pages/login_page.dart';
-import 'package:cubipool2/modules/auth/services/jwt_service.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cubipool2/modules/shared/pages/qr_code_viewer_page.dart';
-import 'package:cubipool2/modules/shared/pages/qr_code_scanner_page.dart';
+import 'package:cubipool2/shared/pages/qr_code_scanner_page.dart';
+import 'package:cubipool2/shared/pages/qr_code_viewer_page.dart';
+import 'package:cubipool2/modules/auth/pages/login_page.dart';
+import 'package:cubipool2/modules/auth/services/jwt_service.dart';
 
 class ProfilePage extends StatefulWidget {
   static const PAGE_ROUTE = '/profile/qr';

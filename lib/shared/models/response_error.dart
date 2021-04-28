@@ -3,9 +3,7 @@ import 'dart:convert';
 class ResponseError implements Exception {
   final List<String> errors;
 
-  ResponseError({
-    required this.errors,
-  });
+  ResponseError({required this.errors});
 
   String get firstError {
     if (errors.length == 0) {

@@ -1,8 +1,8 @@
-import 'package:cubipool2/modules/shared/models/response_error.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cubipool2/shared/models/response_error.dart';
+import 'package:cubipool2/core/utils/username_validator.dart';
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
-import 'package:cubipool2/modules/common/validators/widgets/username_validator.dart';
 
 class RegisterPage extends StatefulWidget {
   static const PAGE_ROUTE = '/auth/register';

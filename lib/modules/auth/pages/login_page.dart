@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
+
+import 'package:cubipool2/shared/models/response_error.dart';
+import 'package:cubipool2/core/utils/username_validator.dart';
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
 import 'package:cubipool2/modules/auth/services/jwt_service.dart';
-import 'package:cubipool2/modules/common/validators/widgets/username_validator.dart';
-import 'package:cubipool2/modules/shared/models/response_error.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
   static const PAGE_ROUTE = '/auth/login';

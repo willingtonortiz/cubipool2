@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'package:cubipool2/modules/shared/models/response_error.dart';
-import 'package:cubipool2/modules/configuration/constants.dart';
+import 'package:cubipool2/core/configuration/constants.dart';
+import 'package:cubipool2/shared/models/response_error.dart';
 
 class LoginResponseBody {
   final String jwt;

@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import 'package:cubipool2/modules/reservation/models/campus.dart';
-
-final campusList = [
-  Campus(id: '1', name: 'VILLA'),
-  Campus(id: '2', name: 'SAN MIGUEL'),
-  Campus(id: '3', name: 'SAN ISIDRO'),
-  Campus(id: '4', name: 'MONTERRICO'),
-];
+import 'package:cubipool2/modules/reservation/presentation/pages/reservation_results_page.dart';
+import 'package:cubipool2/modules/reservation/presentation/provider/providers.dart';
+import 'package:cubipool2/modules/reservation/presentation/provider/reservation_state.dart';
+import 'package:cubipool2/modules/reservation/domain/entities/campus.dart';
 
 final reservationHours = [1, 2];
 const FIRST_RESERVATION_HOUR = 7;
 const LAST_RESERVATION_HOUR = 22;
+
 bool isValidReservationHour(DateTime dateTime) {
   return (FIRST_RESERVATION_HOUR <= dateTime.hour &&
       dateTime.hour <= LAST_RESERVATION_HOUR);
@@ -40,18 +38,9 @@ class ReservationPage extends StatefulWidget {
 }
 
 class _ReservationPageState extends State<ReservationPage> {
-  List<DateTime> startHours = [];
-
   Campus? _selectedCampus;
   DateTime? _selectedStartHour;
   int? _selectedHoursCount;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedHoursCount = 1;
-    startHours = generateDateStartHoursList();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,33 +49,75 @@ class _ReservationPageState extends State<ReservationPage> {
         title: Text('Reservar cubículos'),
       ),
       body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 32.0),
-              Image.asset('assets/logos/books.png'),
-              const SizedBox(height: 32.0),
-              _buildCampusDropdown(campusList),
-              const SizedBox(height: 16.0),
-              _buildStartHour(startHours),
-              const SizedBox(height: 16.0),
-              _buildHoursCount(reservationHours),
-              const SizedBox(height: 16.0),
-              _buildSearchButton(),
-              TextButton(
-                onPressed: () {
-                  generateDateStartHoursList();
-                },
-                child: Text('PRESS'),
-              ),
-            ],
-          ),
-        ),
+        child: _buildApp(),
       ),
     );
   }
 
-  Widget _buildCampusDropdown(List<Campus> campus) {
+  Widget _buildApp() {
+    return ProviderListener<ReservationState>(
+      provider: reservationNotifierProvider.state,
+      onChange: (context, state) async {
+        if (state is ErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        } else if (state is CubiclesFoundState) {
+          // TODO: Send results
+          await Navigator.push<String>(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ReservationResultsPage(),
+            ),
+          );
+
+          context.read(reservationNotifierProvider).getInitialData();
+        }
+      },
+      child: Consumer(
+        builder: (context, watch, child) {
+          final state = watch(reservationNotifierProvider.state);
+
+          if (state is InitialState) {
+            return _buildBody(context, state);
+          } else if (state is LoadingState) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return Container();
+        },
+      ),
+    );
+  }
+
+  Widget _buildBody(
+    BuildContext context,
+    InitialState state,
+  ) {
+    return Center(
+      child: Column(
+        children: [
+          const SizedBox(height: 32.0),
+          Image.asset('assets/logos/books.png'),
+          const SizedBox(height: 32.0),
+          _buildCampusDropdown(context, state.campus),
+          const SizedBox(height: 16.0),
+          _buildStartHour(context, state.startHours),
+          const SizedBox(height: 16.0),
+          _buildHoursCount(reservationHours),
+          const SizedBox(height: 16.0),
+          _buildSearchButton(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCampusDropdown(
+    BuildContext context,
+    List<Campus> campus,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0),
       child: DropdownButton(
@@ -114,7 +145,10 @@ class _ReservationPageState extends State<ReservationPage> {
     );
   }
 
-  Widget _buildStartHour(List<DateTime> startHours) {
+  Widget _buildStartHour(
+    BuildContext context,
+    List<DateTime> startHours,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0),
       child: DropdownButton<DateTime>(
@@ -163,9 +197,6 @@ class _ReservationPageState extends State<ReservationPage> {
                   Radio<int>(
                     groupValue: _selectedHoursCount,
                     value: hour,
-
-                    // focusColor: Colors.blue,
-                    // activeColor: Colors.blue,
                     onChanged:
                         isHourAvailableForStartHour(_selectedStartHour, hour)
                             ? setHoursCount
@@ -193,14 +224,34 @@ class _ReservationPageState extends State<ReservationPage> {
     });
   }
 
-  Widget _buildSearchButton() {
+  Widget _buildSearchButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        print(_selectedCampus);
-        print(_selectedStartHour);
-        print(_selectedHoursCount);
-      },
+      onPressed: hasAllOptionsSelected()
+          ? () {
+              print(_selectedCampus);
+              print(_selectedStartHour);
+              print(_selectedHoursCount);
+
+              context.read(reservationNotifierProvider).searchCubicles(
+                    _selectedCampus!,
+                    _selectedStartHour!,
+                    _selectedHoursCount!,
+                  );
+
+              setState(() {
+                _selectedCampus = null;
+                _selectedStartHour = null;
+                _selectedHoursCount = 1;
+              });
+            }
+          : null,
       child: Text('Buscar'),
     );
+  }
+
+  bool hasAllOptionsSelected() {
+    return _selectedCampus != null &&
+        _selectedHoursCount != null &&
+        _selectedStartHour != null;
   }
 }

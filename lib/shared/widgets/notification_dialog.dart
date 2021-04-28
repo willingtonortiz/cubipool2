@@ -4,17 +4,15 @@ class NotificationDialog extends StatelessWidget {
   final String title;
   final VoidCallback onOk;
   final String? content;
-  String? okText;
+  final String? okText;
 
   NotificationDialog({
     Key? key,
     required this.title,
     required this.onOk,
     this.content,
-    this.okText,
-  }) : super(key: key) {
-    okText ??= 'Aceptar';
-  }
+    this.okText = 'Aceptar',
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

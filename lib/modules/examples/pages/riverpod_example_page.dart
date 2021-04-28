@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final counterProvider = StateNotifierProvider((ref) => CountNotifier());
-
 class CountNotifier extends StateNotifier<int> {
   CountNotifier() : super(0);
 
@@ -13,6 +11,8 @@ class CountNotifier extends StateNotifier<int> {
 
   void reset() => state = 0;
 }
+
+final counterProvider = StateNotifierProvider((ref) => CountNotifier());
 
 class RiverpodExampleAPage extends HookWidget {
   static const PAGE_ROUTE = '/examples/riverpoda';
@@ -28,23 +28,26 @@ class RiverpodExampleAPage extends HookWidget {
           children: [
             Text('$counterState'),
             ElevatedButton(
-                onPressed: () {
-                  counter.increment();
-                  // counter.increment();
-                },
-                child: Text('Increment')),
+              onPressed: () {
+                counter.increment();
+                // counter.increment();
+              },
+              child: Text('Increment'),
+            ),
             ElevatedButton(
-                onPressed: () {
-                  counter.decrement();
-                  // counter.decrement();
-                },
-                child: Text('Decrement')),
+              onPressed: () {
+                counter.decrement();
+                // counter.decrement();
+              },
+              child: Text('Decrement'),
+            ),
             ElevatedButton(
-                onPressed: () {
-                  counter.reset();
-                  // counter.reset();
-                },
-                child: Text('Reset')),
+              onPressed: () {
+                counter.reset();
+                // counter.reset();
+              },
+              child: Text('Reset'),
+            ),
           ],
         ),
       ),

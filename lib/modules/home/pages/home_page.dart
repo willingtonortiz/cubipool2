@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:cubipool2/modules/reservation/pages/reservation_results_page.dart';
+import 'package:cubipool2/modules/reservation/presentation/pages/reservation_page.dart';
 import 'package:cubipool2/modules/profile/pages/profile_page.dart';
 import 'package:cubipool2/modules/search/pages/search_page.dart';
 
@@ -29,13 +29,13 @@ class _HomePageState extends State<HomePage> {
         },
         children: [
           // ReservationDetailPage(),
-          ReservationResultsPage(),
+          // ReservationResultsPage(),
           // NotFoundPage(
           //   message: 'No se encontraron cubiculos disponibles',
           //   imageUrl:
           //       'https://cdn.discordapp.com/attachments/823716132732403712/835549753865273384/b00ba99ad82a972d4e5a481385d8e52e.png',
           // ),
-          // ReservationPage(),
+          ReservationPage(),
           SearchPage(),
           ProfilePage(),
         ],

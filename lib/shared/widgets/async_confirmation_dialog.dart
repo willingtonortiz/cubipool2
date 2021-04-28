@@ -6,8 +6,8 @@ class AsyncConfirmationDialog extends StatefulWidget {
   final Future<void> Function() onOk;
   final Future<void> Function() onCancel;
   final String? content;
-  String? okText;
-  String? cancelText;
+  final String? okText;
+  final String? cancelText;
 
   AsyncConfirmationDialog({
     Key? key,
@@ -15,12 +15,9 @@ class AsyncConfirmationDialog extends StatefulWidget {
     required this.onOk,
     required this.onCancel,
     this.content,
-    this.okText,
-    this.cancelText,
-  }) : super(key: key) {
-    okText ??= 'Aceptar';
-    cancelText ??= 'Cancelar';
-  }
+    this.okText = 'Aceptar',
+    this.cancelText = 'Cancelar',
+  }) : super(key: key);
 
   @override
   _AsyncConfirmationDialogState createState() =>
