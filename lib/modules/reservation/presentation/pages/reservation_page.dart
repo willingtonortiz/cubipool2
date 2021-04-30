@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:cubipool2/modules/reservation/presentation/pages/reservation_results_page.dart';
+import 'package:cubipool2/modules/reservation/presentation/pages/reservation_search_results_page.dart';
 import 'package:cubipool2/modules/reservation/presentation/provider/providers.dart';
-import 'package:cubipool2/modules/reservation/presentation/provider/reservation_state.dart';
+import 'package:cubipool2/modules/reservation/presentation/provider/search_reservation_state.dart';
 import 'package:cubipool2/modules/reservation/domain/entities/campus.dart';
 
-final reservationHours = [1, 2];
+const DEFAULT_RESERVATION_HOURS = [1, 2];
 const FIRST_RESERVATION_HOUR = 7;
 const LAST_RESERVATION_HOUR = 22;
 
@@ -55,19 +55,23 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 
   Widget _buildApp() {
-    return ProviderListener<ReservationState>(
+    return ProviderListener<SearchReservationsState>(
       provider: reservationNotifierProvider.state,
       onChange: (context, state) async {
         if (state is ErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
-        } else if (state is CubiclesFoundState) {
-          // TODO: Send results
-          await Navigator.push<String>(
+        } else if (state is ReservationsFoundState) {
+          Navigator.push<String>(
             context,
             MaterialPageRoute(
-              builder: (context) => ReservationResultsPage(),
+              builder: (context) => ReservationSearchResultsPage(
+                reservations: state.reservations,
+                campus: _selectedCampus!,
+                startHour: _selectedStartHour!,
+                hoursCount: _selectedHoursCount!,
+              ),
             ),
           );
 
@@ -79,7 +83,7 @@ class _ReservationPageState extends State<ReservationPage> {
           final state = watch(reservationNotifierProvider.state);
 
           if (state is InitialState) {
-            return _buildBody(context, state);
+            return _buildInitialState(context, state);
           } else if (state is LoadingState) {
             return Center(
               child: CircularProgressIndicator(),
@@ -92,7 +96,7 @@ class _ReservationPageState extends State<ReservationPage> {
     );
   }
 
-  Widget _buildBody(
+  Widget _buildInitialState(
     BuildContext context,
     InitialState state,
   ) {
@@ -106,7 +110,7 @@ class _ReservationPageState extends State<ReservationPage> {
           const SizedBox(height: 16.0),
           _buildStartHour(context, state.startHours),
           const SizedBox(height: 16.0),
-          _buildHoursCount(reservationHours),
+          _buildHoursCount(DEFAULT_RESERVATION_HOURS),
           const SizedBox(height: 16.0),
           _buildSearchButton(context),
         ],
@@ -133,14 +137,14 @@ class _ReservationPageState extends State<ReservationPage> {
             _selectedCampus = item;
           });
         },
-        items: campus.map(
-          (item) {
-            return DropdownMenuItem(
-              value: item,
-              child: Text(item.name),
-            );
-          },
-        ).toList(),
+        items: campus
+            .map(
+              (item) => DropdownMenuItem(
+                value: item,
+                child: Text(item.name),
+              ),
+            )
+            .toList(),
       ),
     );
   }
@@ -237,12 +241,6 @@ class _ReservationPageState extends State<ReservationPage> {
                     _selectedStartHour!,
                     _selectedHoursCount!,
                   );
-
-              setState(() {
-                _selectedCampus = null;
-                _selectedStartHour = null;
-                _selectedHoursCount = 1;
-              });
             }
           : null,
       child: Text('Buscar'),
