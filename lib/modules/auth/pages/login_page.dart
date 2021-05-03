@@ -153,6 +153,7 @@ class _LoginPageState extends State<LoginPage> {
       final response = await AuthHttpService.login(username, password);
       final jwtService = JwtService();
       await jwtService.saveToken(response.jwt);
+      await AuthHttpService.saveUserName(username);
       Navigator.pushReplacementNamed(context, '/home');
     } on ResponseError catch (error) {
       setState(() {

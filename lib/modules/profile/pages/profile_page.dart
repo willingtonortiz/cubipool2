@@ -1,3 +1,4 @@
+import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cubipool2/shared/pages/qr_code_scanner_page.dart';
@@ -46,14 +47,16 @@ class _ProfilePageState extends State<ProfilePage> {
   void logout() {
     final jwtService = JwtService();
     jwtService.removeToken();
+    AuthHttpService.removeUserName();
     Navigator.pushReplacementNamed(context, LoginPage.PAGE_ROUTE);
   }
 
-  void showQRCode() {
+  Future<void> showQRCode() async {
+    String userName = (await AuthHttpService.getUserName())!;
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QRCodeViewerPage(data: 'HOLA MUNDO'),
+        builder: (context) => QRCodeViewerPage(data: userName),
       ),
     );
   }
