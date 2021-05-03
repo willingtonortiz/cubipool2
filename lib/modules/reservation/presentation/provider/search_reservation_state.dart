@@ -4,7 +4,7 @@ import 'package:cubipool2/core/error/failures.dart';
 import 'package:cubipool2/core/usecases/usecase.dart';
 import 'package:cubipool2/modules/reservation/domain/entities/reservation.dart';
 import 'package:cubipool2/modules/reservation/domain/usecases/get_all_reservations.dart';
-import 'package:cubipool2/modules/reservation/presentation/pages/reservation_page.dart';
+import 'package:cubipool2/modules/reservation/presentation/pages/search_reservation_page.dart';
 import 'package:cubipool2/modules/reservation/domain/entities/campus.dart';
 import 'package:cubipool2/modules/reservation/domain/usecases/get_all_campus.dart';
 
