@@ -52,19 +52,11 @@ class MainPage extends StatelessWidget {
     return FutureBuilder(
       future: checkIfUserIsLoggedIn(),
       builder: (context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return MaterialApp(
-            key: Key('LOADING_KEY'),
-            debugShowCheckedModeBanner: false,
-            home: Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          );
-        } else if (snapshot.connectionState == ConnectionState.done) {
-          final materialApp = _buildMaterialApp(appTitle, themeData);
+        final materialApp = _buildMaterialApp(appTitle, themeData);
 
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return materialApp('loading');
+        } else if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data!) {
             return materialApp(HomePage.PAGE_ROUTE);
           } else {
@@ -83,7 +75,7 @@ class MainPage extends StatelessWidget {
   ) =>
       (String initialPage) {
         return MaterialApp(
-          key: Key('MATERIAL_KEY'),
+          key: UniqueKey(),
           title: appTitle,
           debugShowCheckedModeBanner: false,
           theme: themeData,
@@ -92,6 +84,13 @@ class MainPage extends StatelessWidget {
             LoginPage.PAGE_ROUTE: (context) => LoginPage(),
             RegisterPage.PAGE_ROUTE: (context) => RegisterPage(),
             HomePage.PAGE_ROUTE: (context) => HomePage(),
+            'loading': (context) => Scaffold(
+                  body: SafeArea(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                ),
           },
         );
       };
