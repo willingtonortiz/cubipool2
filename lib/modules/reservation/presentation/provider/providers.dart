@@ -6,11 +6,11 @@ import 'package:cubipool2/modules/reservation/domain/usecases/get_all_campus.dar
 import 'package:cubipool2/modules/reservation/presentation/provider/search_reservation_state.dart';
 
 final getAllCampus = injector.get<GetAllCampus>();
-final getAllReservations = injector.get<GetAllReservations>();
+final getAllReservations = injector.get<SearchAllReservations>();
 
 final getAllCampusProvider = Provider<GetAllCampus>((ref) => getAllCampus);
 final getAllReservationsProvider =
-    Provider<GetAllReservations>((ref) => getAllReservations);
+    Provider<SearchAllReservations>((ref) => getAllReservations);
 
 final reservationNotifierProvider = StateNotifierProvider(
   (ref) => ReservationNotifier(

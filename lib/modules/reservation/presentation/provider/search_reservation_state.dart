@@ -36,7 +36,7 @@ class ErrorState extends SearchReservationsState {
 
 class ReservationNotifier extends StateNotifier<SearchReservationsState> {
   final GetAllCampus _getAllCampus;
-  final GetAllReservations _getAllReservations;
+  final SearchAllReservations _getAllReservations;
 
   ReservationNotifier(
     this._getAllCampus,

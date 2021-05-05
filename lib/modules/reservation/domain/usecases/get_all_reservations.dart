@@ -17,11 +17,11 @@ class GetAllReservationsParams {
   });
 }
 
-class GetAllReservations
+class SearchAllReservations
     implements UseCase<List<Reservation>, GetAllReservationsParams> {
   final ReservationsRepository repository;
 
-  GetAllReservations(this.repository);
+  SearchAllReservations(this.repository);
 
   @override
   Future<Either<Failure, List<Reservation>>> execute(
