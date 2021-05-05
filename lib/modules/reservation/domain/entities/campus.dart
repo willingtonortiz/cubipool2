@@ -29,4 +29,14 @@ class Campus {
   String toJson() => json.encode(toMap());
 
   factory Campus.fromJson(String source) => Campus.fromMap(json.decode(source));
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Campus && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode;
 }

@@ -3,6 +3,6 @@ import 'package:dartz/dartz.dart';
 
 import 'package:cubipool2/core/error/failures.dart';
 
-abstract class ReservationRepository {
+abstract class MyReservationRepository {
   Future<Either<Failure, List<Reservation>>> getAllReservations();
 }

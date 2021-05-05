@@ -1,3 +1,4 @@
+import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
 import 'package:cubipool2/modules/profile/presentation/pages/my_reservations_page.dart';
 import 'package:cubipool2/modules/profile/presentation/provider/profile_state.dart';
 import 'package:cubipool2/modules/profile/presentation/provider/providers.dart';
@@ -99,24 +100,20 @@ class _ProfilePageState extends State<ProfilePage> {
   void logout() {
     final jwtService = JwtService();
     jwtService.removeToken();
+    AuthHttpService.removeUserName();
     Navigator.pushReplacementNamed(context, LoginPage.PAGE_ROUTE);
   }
 
   void showMyReservations() {
     context.read(profileNotifierProvider).getAllReservations();
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => MyReservationsPage(reservations: []),
-    //   ),
-    // );
   }
 
-  void showQRCode() {
+  Future<void> showQRCode() async {
+    String userName = (await AuthHttpService.getUserName())!;
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QRCodeViewerPage(data: 'HOLA MUNDO'),
+        builder: (context) => QRCodeViewerPage(data: userName),
       ),
     );
   }

@@ -22,22 +22,6 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
-  void initState() {
-    super.initState();
-    checkIfUserIsLoggedIn();
-  }
-
-  Future<void> checkIfUserIsLoggedIn() async {
-    final jwtService = JwtService();
-    final token = await jwtService.getToken();
-    if (token == null) {
-      return;
-    }
-
-    Navigator.pushReplacementNamed(context, '/home');
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -169,6 +153,7 @@ class _LoginPageState extends State<LoginPage> {
       final response = await AuthHttpService.login(username, password);
       final jwtService = JwtService();
       await jwtService.saveToken(response.jwt);
+      await AuthHttpService.saveUserName(username);
       Navigator.pushReplacementNamed(context, '/home');
     } on ResponseError catch (error) {
       setState(() {

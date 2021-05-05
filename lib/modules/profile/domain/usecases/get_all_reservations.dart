@@ -6,7 +6,7 @@ import 'package:cubipool2/core/error/failures.dart';
 import 'package:cubipool2/core/usecases/usecase.dart';
 
 class GetAllReservations implements UseCase<List<Reservation>, NoParams> {
-  final ReservationRepository repository;
+  final MyReservationRepository repository;
 
   GetAllReservations(this.repository);
 

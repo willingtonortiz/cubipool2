@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:cubipool2/core/error/failures.dart';
 
-class ReservationRepositoryImpl implements ReservationRepository {
+class ReservationRepositoryImpl implements MyReservationRepository {
   @override
   Future<Either<Failure, List<Reservation>>> getAllReservations() async {
 

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:cubipool2/core/configuration/constants.dart';
@@ -27,6 +28,9 @@ class LoginResponseBody {
 }
 
 class AuthHttpService {
+  static const _USERNAME_BOX = "USERNAME_BOX";
+  static const _USERNAME_KEY = "USERNAME_KEY";
+
   static Future<LoginResponseBody> login(
     String username,
     String password,
@@ -65,5 +69,20 @@ class AuthHttpService {
       final responseError = ResponseError.fromMap(jsonDecode(response.body));
       throw responseError;
     }
+  }
+
+  static Future<void> saveUserName(String username) async {
+    final box = await Hive.openBox<String>(_USERNAME_BOX);
+    await box.put(_USERNAME_KEY, username);
+  }
+
+  static Future<String?> getUserName() async {
+    final box = await Hive.openBox<String>(_USERNAME_BOX);
+    return box.get(_USERNAME_KEY);
+  }
+
+  static Future<void> removeUserName() async {
+    final box = await Hive.openBox<String>(_USERNAME_BOX);
+    await box.delete(_USERNAME_KEY);
   }
 }
