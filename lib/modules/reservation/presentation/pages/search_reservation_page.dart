@@ -232,10 +232,6 @@ class _ReservationPageState extends State<ReservationPage> {
     return ElevatedButton(
       onPressed: hasAllOptionsSelected()
           ? () {
-              print(_selectedCampus);
-              print(_selectedStartHour);
-              print(_selectedHoursCount);
-
               context.read(reservationNotifierProvider).searchCubicles(
                     _selectedCampus!,
                     _selectedStartHour!,

@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:cubipool2/core/error/failures.dart';
 import 'package:cubipool2/core/usecases/usecase.dart';
 import 'package:cubipool2/modules/reservation/domain/entities/reservation.dart';
-import 'package:cubipool2/modules/reservation/domain/usecases/get_all_reservations.dart';
+import 'package:cubipool2/modules/reservation/domain/usecases/search_all_reservations.dart';
 import 'package:cubipool2/modules/reservation/presentation/pages/search_reservation_page.dart';
 import 'package:cubipool2/modules/reservation/domain/entities/campus.dart';
 import 'package:cubipool2/modules/reservation/domain/usecases/get_all_campus.dart';
@@ -36,11 +36,11 @@ class ErrorState extends SearchReservationsState {
 
 class ReservationNotifier extends StateNotifier<SearchReservationsState> {
   final GetAllCampus _getAllCampus;
-  final SearchAllReservations _getAllReservations;
+  final SearchAllReservations _searchAllReservations;
 
   ReservationNotifier(
     this._getAllCampus,
-    this._getAllReservations,
+    this._searchAllReservations,
   ) : super(LoadingState()) {
     getInitialData();
   }
@@ -65,26 +65,22 @@ class ReservationNotifier extends StateNotifier<SearchReservationsState> {
     DateTime startHour,
     int hoursCount,
   ) async {
-    if (state is InitialState) {
-      state = LoadingState();
+    state = LoadingState();
 
-      await Future.delayed(Duration(seconds: 2));
+    final reservationsEither = await _searchAllReservations.execute(
+      SearchAllReservationsParams(
+        campusId: campus.id,
+        startHour: startHour,
+        hoursCount: hoursCount,
+      ),
+    );
 
-      final reservationsEither = await _getAllReservations.execute(
-        GetAllReservationsParams(
-          campusId: campus.id,
-          startHour: startHour,
-          hoursCount: hoursCount,
-        ),
-      );
-
-      reservationsEither.fold(
-        _mapFailureToMessage,
-        (reservations) {
-          state = ReservationsFoundState(reservations);
-        },
-      );
-    }
+    reservationsEither.fold(
+      _mapFailureToMessage,
+      (reservations) {
+        state = ReservationsFoundState(reservations);
+      },
+    );
   }
 
   ErrorState _mapFailureToMessage(Failure failure) {

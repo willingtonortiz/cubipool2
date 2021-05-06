@@ -157,7 +157,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
       Navigator.of(context).pop();
     } on ResponseError catch (error) {
-      print(error);
       setState(() {
         _isLoading = false;
       });

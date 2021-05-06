@@ -12,16 +12,6 @@ import 'package:cubipool2/modules/reservation/domain/repositories/campus_reposit
 class CampusRepositoryImpl implements CampusRepository {
   @override
   Future<Either<Failure, List<Campus>>> getAllCampus() async {
-    // await Future.delayed(Duration(seconds: 2));
-
-    // final campusList = [
-    //   Campus(id: '1', name: 'VILLA'),
-    //   Campus(id: '2', name: 'SAN MIGUEL'),
-    //   Campus(id: '3', name: 'SAN ISIDRO'),
-    //   Campus(id: '4', name: 'MONTERRICO'),
-    // ];
-    // return Right(campusList);
-
     final url = Uri.parse('$BASE_URL/campuses');
     final token = await JwtService.getToken();
     final response = await http.get(
@@ -36,8 +26,8 @@ class CampusRepositoryImpl implements CampusRepository {
       return Left(responseError);
     }
 
-    final decodeBody = jsonDecode(response.body);
-    final data = List<Campus>.from(decodeBody.map((x) => Campus.fromMap(x)));
+    final decodedBody = jsonDecode(response.body);
+    final data = List<Campus>.from(decodedBody.map((x) => Campus.fromMap(x)));
 
     return Right(data);
   }

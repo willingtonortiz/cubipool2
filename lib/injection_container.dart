@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 
 import 'package:cubipool2/modules/reservation/domain/repositories/reservations_repository.dart';
-import 'package:cubipool2/modules/reservation/domain/usecases/get_all_reservations.dart';
+import 'package:cubipool2/modules/reservation/domain/usecases/search_all_reservations.dart';
 import 'package:cubipool2/modules/reservation/infrastructure/repositories/reservations_repository_impl.dart';
 import 'package:cubipool2/modules/reservation/domain/repositories/campus_repository.dart';
 import 'package:cubipool2/modules/reservation/domain/usecases/get_all_campus.dart';
