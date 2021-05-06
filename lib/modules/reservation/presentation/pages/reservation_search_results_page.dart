@@ -1,3 +1,4 @@
+import 'package:cubipool2/shared/pages/not_found_page.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
@@ -67,6 +68,13 @@ class ReservationSearchResultsPage extends StatelessWidget {
   }
 
   Widget _buildCubicleList(BuildContext context) {
+    if (reservations.isEmpty) {
+      return Expanded(
+        child:
+            NotFoundPage.fromMonitaChina('No encontré cubiculos, lo siento...'),
+      );
+    }
+
     return Expanded(
       child: ListView.builder(
         itemCount: reservations.length,
@@ -82,20 +90,11 @@ class ReservationSearchResultsPage extends StatelessWidget {
     BuildContext context,
     Reservation reservation,
   ) {
+    final formatter = DateFormat.Hm();
+    final formattedStartHour = formatter.format(reservation.startHour);
+    final formattedEndHour = formatter.format(reservation.endHour);
+
     return InkWell(
-      onTap: () async {
-        await Navigator.push<String>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ReservationDetailPage(
-              reservation: reservation,
-              campus: campus,
-              hoursCount: hoursCount,
-              startHour: startHour,
-            ),
-          ),
-        );
-      },
       child: Card(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
@@ -108,7 +107,7 @@ class ReservationSearchResultsPage extends StatelessWidget {
                       children: [
                         Icon(Icons.tab_outlined),
                         const SizedBox(width: 8.0),
-                        Text('Cubículo ${reservation.code}'),
+                        Text('Cubículo ${reservation.cubicleCode}'),
                       ],
                     ),
                     const SizedBox(height: 4.0),
@@ -116,7 +115,7 @@ class ReservationSearchResultsPage extends StatelessWidget {
                       children: [
                         Icon(Icons.watch_later_outlined),
                         const SizedBox(width: 8.0),
-                        Text('10:15 - 11:00'),
+                        Text('$formattedStartHour - $formattedEndHour'),
                       ],
                     ),
                   ],
@@ -127,6 +126,17 @@ class ReservationSearchResultsPage extends StatelessWidget {
           ),
         ),
       ),
+      onTap: () async {
+        await Navigator.push<String>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ReservationDetailPage(
+              campus: campus,
+              reservation: reservation,
+            ),
+          ),
+        );
+      },
     );
   }
 }

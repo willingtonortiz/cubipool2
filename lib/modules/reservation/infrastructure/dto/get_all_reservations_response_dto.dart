@@ -1,29 +1,43 @@
 import 'dart:convert';
 
-import 'package:cubipool2/modules/reservation/domain/entities/reservation.dart';
+class GetAllReservationsResponseItem {
+  final String cubicleId;
+  final String cubicleCode;
+  final String startTime;
+  final String endTime;
 
-class GetAllReservationsResponseDto {
-  final List<Reservation> reservations;
-
-  GetAllReservationsResponseDto({
-    required this.reservations,
+  GetAllReservationsResponseItem({
+    required this.cubicleId,
+    required this.cubicleCode,
+    required this.startTime,
+    required this.endTime,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'reservations': reservations.map((x) => x.toMap()).toList(),
+      'cubicleId': cubicleId,
+      'cubicleCode': cubicleCode,
+      'startTime': startTime,
+      'endTime': endTime,
     };
   }
 
-  factory GetAllReservationsResponseDto.fromMap(Map<String, dynamic> map) {
-    return GetAllReservationsResponseDto(
-      reservations: List<Reservation>.from(
-          map['reservations']?.map((x) => Reservation.fromMap(x))),
+  factory GetAllReservationsResponseItem.fromMap(Map<String, dynamic> map) {
+    return GetAllReservationsResponseItem(
+      cubicleId: map['cubicleId'],
+      cubicleCode: map['cubicleCode'],
+      startTime: map['startTime'],
+      endTime: map['endTime'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory GetAllReservationsResponseDto.fromJson(String source) =>
-      GetAllReservationsResponseDto.fromMap(json.decode(source));
+  factory GetAllReservationsResponseItem.fromJson(String source) =>
+      GetAllReservationsResponseItem.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'GetAllReservationsResponseItem(cubicleId: $cubicleId, cubicleCode: $cubicleCode, startTime: $startTime, endTime: $endTime)';
+  }
 }

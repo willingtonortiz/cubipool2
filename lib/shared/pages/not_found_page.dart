@@ -5,11 +5,16 @@ class NotFoundPage extends StatelessWidget {
   final String message;
   final String? imageUrl;
 
-  NotFoundPage({
+  const NotFoundPage({
     Key? key,
     required this.message,
     this.imageUrl,
   }) : super(key: key);
+
+  const NotFoundPage.fromMonitaChina(this.message, {Key? key})
+      : imageUrl =
+            'https://i.pinimg.com/originals/b0/0b/a9/b00ba99ad82a972d4e5a481385d8e52e.png',
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +26,8 @@ class NotFoundPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  message,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.headline5?.fontSize,
-                  ),
-                ),
-                _buildImage(context, imageUrl),
+                _buildMessage(context, message),
+                _buildImageFromUrl(context, imageUrl),
               ],
             ),
           ),
@@ -37,7 +36,17 @@ class NotFoundPage extends StatelessWidget {
     );
   }
 
-  Widget _buildImage(BuildContext context, String? imageUrl) {
+  Widget _buildMessage(BuildContext context, String message) {
+    return Text(
+      message,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: Theme.of(context).textTheme.headline5?.fontSize,
+      ),
+    );
+  }
+
+  Widget _buildImageFromUrl(BuildContext context, String? imageUrl) {
     return Conditional.single(
       context: context,
       conditionBuilder: (context) => imageUrl != null,

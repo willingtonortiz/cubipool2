@@ -14,8 +14,12 @@ class ServerFailure extends Failure {
   }
 
   factory ServerFailure.fromMap(Map<String, dynamic> map) {
-    return ServerFailure(
-      List<String>.from(map['errors']),
-    );
+    if (map.containsKey('error')) {
+      return ServerFailure([map['error']]);
+    } else {
+      return ServerFailure(
+        List<String>.from(map['errors']),
+      );
+    }
   }
 }

@@ -7,24 +7,19 @@ import 'package:cubipool2/modules/reservation/domain/entities/campus.dart';
 
 class ReservationDetailPage extends StatelessWidget {
   final Reservation reservation;
-  final DateTime startHour;
   final Campus campus;
-  final int hoursCount;
 
   const ReservationDetailPage({
     Key? key,
-    required this.reservation,
     required this.campus,
-    required this.startHour,
-    required this.hoursCount,
+    required this.reservation,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final endHour = startHour.add(Duration(hours: hoursCount));
     final formatter = DateFormat.Hm();
-    final formattedStartHour = formatter.format(startHour);
-    final formattedEndHour = formatter.format(endHour);
+    final formattedStartHour = formatter.format(reservation.startHour);
+    final formattedEndHour = formatter.format(reservation.endHour);
 
     return Scaffold(
       appBar: AppBar(
@@ -43,7 +38,7 @@ class ReservationDetailPage extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.ac_unit),
+                      Icon(Icons.biotech),
                       const SizedBox(width: 8.0),
                       Text('Campus ${campus.name}'),
                     ],
@@ -52,16 +47,16 @@ class ReservationDetailPage extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.ac_unit),
+                      Icon(Icons.access_time),
                       const SizedBox(width: 8.0),
-                      Text('Cubículo ${reservation.code}'),
+                      Text('Cubículo ${reservation.cubicleCode}'),
                     ],
                   ),
                   const SizedBox(height: 16.0),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.ac_unit),
+                      Icon(Icons.calendar_today),
                       const SizedBox(width: 8.0),
                       Text('$formattedStartHour - $formattedEndHour'),
                     ],
@@ -100,17 +95,3 @@ class ReservationDetailPage extends StatelessWidget {
     );
   }
 }
-
-// class ReservationDetailPage extends StatefulWidget {
-//   ReservationDetailPage({Key? key}) : super(key: key);
-
-//   @override
-//   _ReservationDetailPageState createState() => _ReservationDetailPageState();
-// }
-
-// class _ReservationDetailPageState extends State<ReservationDetailPage> {
-//   @override
-//   Widget build(BuildContext context) {
-
-//   }
-// }
