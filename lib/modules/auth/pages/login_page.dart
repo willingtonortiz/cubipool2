@@ -1,3 +1,4 @@
+import 'package:cubipool2/modules/auth/services/user_information_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cubipool2/shared/models/response_error.dart';
@@ -151,9 +152,10 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> loginUser(String username, String password) async {
     try {
       final response = await AuthHttpService.login(username, password);
-      final jwtService = JwtService();
-      await jwtService.saveToken(response.jwt);
+      await JwtService.saveToken(response.jwt);
       await AuthHttpService.saveUserName(username);
+      await UserInformationService.saveUsername(username);
+
       Navigator.pushReplacementNamed(context, '/home');
     } on ResponseError catch (error) {
       setState(() {

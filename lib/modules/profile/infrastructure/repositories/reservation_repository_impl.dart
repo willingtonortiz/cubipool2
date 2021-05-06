@@ -14,10 +14,9 @@ import 'package:cubipool2/core/error/failures.dart';
 class ReservationRepositoryImpl implements MyReservationRepository {
   @override
   Future<Either<Failure, List<Reservation>>> getAllReservations() async {
-
     final url =
         Uri.parse('$BASE_URL/reservations/me?userReservationRoles=OWNER');
-    final token = await JwtService().getToken();
+    final token = await JwtService.getToken();
     final response =
         await http.get(url, headers: {'Authorization': 'Bearer $token'});
 

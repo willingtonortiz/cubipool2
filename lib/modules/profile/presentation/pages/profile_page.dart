@@ -97,10 +97,9 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void logout() {
-    final jwtService = JwtService();
-    jwtService.removeToken();
-    AuthHttpService.removeUserName();
+  void logout() async {
+    await JwtService.removeToken();
+    await AuthHttpService.removeUserName();
     Navigator.pushReplacementNamed(context, LoginPage.PAGE_ROUTE);
   }
 

@@ -4,7 +4,6 @@ import 'package:cubipool2/modules/auth/services/jwt_service.dart';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:cubipool2/modules/reservation/infrastructure/dto/get_all_campus_response_dto.dart';
 import 'package:cubipool2/core/configuration/constants.dart';
 import 'package:cubipool2/core/error/failures.dart';
 import 'package:cubipool2/modules/reservation/domain/entities/campus.dart';
@@ -24,7 +23,7 @@ class CampusRepositoryImpl implements CampusRepository {
     // return Right(campusList);
 
     final url = Uri.parse('$BASE_URL/campuses');
-    final token = await JwtService().getToken();
+    final token = await JwtService.getToken();
     final response = await http.get(
       url,
       headers: {'Authorization': 'Bearer $token'},

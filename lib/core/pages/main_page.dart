@@ -96,8 +96,7 @@ class MainPage extends StatelessWidget {
       };
 
   Future<bool> checkIfUserIsLoggedIn() async {
-    final jwtService = JwtService();
-    final token = await jwtService.getToken();
+    final token = await JwtService.getToken();
     return token != null;
   }
 }
