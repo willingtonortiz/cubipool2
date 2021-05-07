@@ -80,38 +80,53 @@ class ReservationDetailPage extends StatelessWidget {
   Widget _buildReservationButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        bool isOk = false;
+        bool isReservationSuccessful = false;
+        bool hasCancelled = false;
+
         final dialog = AsyncConfirmationDialog(
           title: 'Confirmación de reserva',
           content: '¿Estás seguro que quieres reservar este cubículo?',
           onOk: () async {
-            isOk = true;
-          },
-          onCancel: () async {},
-        );
+            final either = await reserveCubicle.execute(ReserveCubicleParams(
+              cubicleId: reservation.cubicleId,
+              startTime: reservation.startHour,
+              endTime: reservation.endHour.add(Duration(hours: 2)),
+            ));
 
+            either.fold(
+              (l) => isReservationSuccessful = false,
+              (r) => isReservationSuccessful = true,
+            );
+          },
+          onCancel: () async => hasCancelled = true,
+        );
         await showDialog(
           context: context,
           builder: (context) => dialog,
           barrierDismissible: false,
         );
-        if (isOk) {
-          final reserveNotification = NotificationDialog(
-              title: "Reserva exitosa",
-              onOk: () async {
-                await reserveCubicle.execute(ReserveCubicleParams(
-                    cubicleId: reservation.cubicleId,
-                    startTime: reservation.startHour,
-                    endTime: reservation.endHour));
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-              });
-          showDialog(
-            context: context,
-            builder: (context) => reserveNotification,
-            barrierDismissible: false,
-          );
+
+        if (hasCancelled) {
+          return;
         }
+
+        final notificationMessage =
+            isReservationSuccessful ? 'Reserva exitosa' : 'Falló la reserva';
+
+        final reserveNotification = NotificationDialog(
+          title: notificationMessage,
+          onOk: () async {
+            if (isReservationSuccessful) {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            }
+          },
+        );
+        await showDialog(
+          context: context,
+          builder: (context) => reserveNotification,
+          barrierDismissible: false,
+        );
       },
       child: Text('Reservar'),
     );

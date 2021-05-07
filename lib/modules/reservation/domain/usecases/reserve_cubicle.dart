@@ -23,8 +23,9 @@ class ReserveCubicle implements UseCase<void, ReserveCubicleParams> {
   @override
   Future<Either<Failure, void>> execute(ReserveCubicleParams params) async {
     return await repository.reserveCubicle(
-        cubicleId: params.cubicleId,
-        startTime: params.startTime,
-        endTime: params.endTime);
+      cubicleId: params.cubicleId,
+      startTime: params.startTime,
+      endTime: params.endTime,
+    );
   }
 }

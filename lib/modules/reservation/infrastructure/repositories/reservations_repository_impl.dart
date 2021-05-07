@@ -49,14 +49,19 @@ class ReservationsRepositoryImpl implements ReservationsRepository {
   }
 
   @override
-  Future<Either<Failure, void>> reserveCubicle(
-      {required String cubicleId,
-      required DateTime startTime,
-      required DateTime endTime}) async {
+  Future<Either<Failure, void>> reserveCubicle({
+    required String cubicleId,
+    required DateTime startTime,
+    required DateTime endTime,
+  }) async {
     final url = Uri.parse('$BASE_URL/reservations');
     final token = await JwtService.getToken();
     final response =
         await http.get(url, headers: {'Authorization': 'Bearer $token'});
+
+    print(response.statusCode);
+    print(response.body);
+
     if (response.statusCode != HttpStatus.ok) {
       final responseError = ServerFailure.fromMap(
         jsonDecode(response.body),

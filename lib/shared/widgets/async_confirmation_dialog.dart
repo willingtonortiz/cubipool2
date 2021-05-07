@@ -4,7 +4,7 @@ import 'package:flutter_conditional_rendering/conditional.dart';
 class AsyncConfirmationDialog extends StatefulWidget {
   final String title;
   final Future<void> Function() onOk;
-  final Future<void> Function() onCancel;
+  final Future<void> Function()? onCancel;
   final String? content;
   final String? okText;
   final String? cancelText;
@@ -13,7 +13,7 @@ class AsyncConfirmationDialog extends StatefulWidget {
     Key? key,
     required this.title,
     required this.onOk,
-    required this.onCancel,
+    this.onCancel,
     this.content,
     this.okText = 'Aceptar',
     this.cancelText = 'Cancelar',
@@ -80,7 +80,9 @@ class _AsyncConfirmationDialogState extends State<AsyncConfirmationDialog> {
           ? null
           : () async {
               setState(() => _isLoading = true);
-              await widget.onCancel();
+              if (widget.onCancel != null) {
+                await widget.onCancel!();
+              }
               Navigator.of(context).pop();
             },
       child: Text(widget.cancelText!),
