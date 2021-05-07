@@ -22,4 +22,7 @@ class ServerFailure extends Failure {
       );
     }
   }
+
+  @override
+  String toString() => 'ServerFailure(errors: $errors)';
 }
