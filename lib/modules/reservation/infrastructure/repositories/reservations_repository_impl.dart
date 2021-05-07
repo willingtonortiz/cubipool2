@@ -40,12 +40,29 @@ class ReservationsRepositoryImpl implements ReservationsRepository {
       );
       return Left(serverFailure);
     }
-
     final decodedBody = jsonDecode(response.body);
     final data = List<GetAllReservationsResponseItem>.from(
       decodedBody.map((x) => GetAllReservationsResponseItem.fromMap(x)),
     );
 
     return Right(data);
+  }
+
+  @override
+  Future<Either<Failure, void>> reserveCubicle(
+      {required String cubicleId,
+      required DateTime startTime,
+      required DateTime endTime}) async {
+    final url = Uri.parse('$BASE_URL/reservations');
+    final token = await JwtService.getToken();
+    final response =
+        await http.get(url, headers: {'Authorization': 'Bearer $token'});
+    if (response.statusCode != HttpStatus.ok) {
+      final responseError = ServerFailure.fromMap(
+        jsonDecode(response.body),
+      );
+      return Left(responseError);
+    }
+    return Right(null);
   }
 }

@@ -1,3 +1,6 @@
+import 'package:cubipool2/modules/reservation/domain/usecases/reserve_cubicle.dart';
+import 'package:cubipool2/modules/reservation/presentation/provider/providers.dart';
+import 'package:cubipool2/shared/widgets/notification_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
@@ -77,19 +80,38 @@ class ReservationDetailPage extends StatelessWidget {
   Widget _buildReservationButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
+        bool isOk = false;
         final dialog = AsyncConfirmationDialog(
-          title: '¿Esta seguro de reservar este cubiculo?',
+          title: 'Confirmación de reserva',
+          content: '¿Estás seguro que quieres reservar este cubículo?',
           onOk: () async {
-            await Future.delayed(Duration(seconds: 1));
+            isOk = true;
           },
           onCancel: () async {},
         );
 
-        showDialog(
+        await showDialog(
           context: context,
           builder: (context) => dialog,
           barrierDismissible: false,
         );
+        if (isOk) {
+          final reserveNotification = NotificationDialog(
+              title: "Reserva exitosa",
+              onOk: () async {
+                await reserveCubicle.execute(ReserveCubicleParams(
+                    cubicleId: reservation.cubicleId,
+                    startTime: reservation.startHour,
+                    endTime: reservation.endHour));
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+              });
+          showDialog(
+            context: context,
+            builder: (context) => reserveNotification,
+            barrierDismissible: false,
+          );
+        }
       },
       child: Text('Reservar'),
     );

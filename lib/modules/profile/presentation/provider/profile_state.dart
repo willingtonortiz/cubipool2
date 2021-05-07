@@ -45,8 +45,6 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     if (state is InitialState) {
       state = LoadingState();
 
-      await Future.delayed(Duration(seconds: 2));
-
       final reservationsEither = await _getAllReservations.execute(NoParams());
 
       reservationsEither.fold(
