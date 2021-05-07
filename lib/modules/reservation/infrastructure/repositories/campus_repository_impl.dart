@@ -27,6 +27,7 @@ class CampusRepositoryImpl implements CampusRepository {
     }
 
     final decodedBody = jsonDecode(response.body);
+
     final data = List<Campus>.from(decodedBody.map((x) => Campus.fromMap(x)));
 
     return Right(data);

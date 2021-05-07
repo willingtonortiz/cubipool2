@@ -28,7 +28,7 @@
   ],
   "compounds": [
     {
-      "name": "All devices",
+      "name": "All mobile devices",
       "configurations": ["POT LX3", "Pixel 2 API 27"]
     }
   ]

@@ -2,6 +2,7 @@ import 'package:cubipool2/modules/profile/domain/entities/reservation.dart';
 import 'package:cubipool2/modules/reservation/presentation/pages/detail_my_reservation_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class MyReservationsPage extends StatefulWidget {
   static const PAGE_ROUTE = '/profile/my-reservations';
@@ -84,6 +85,13 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
   }
 
   Widget _buildReservationItem(BuildContext context, Reservation reservation) {
+    final formatter = DateFormat.Hm();
+
+    final formattedStartHour =
+        formatter.format(reservation.startDateTime.toLocal());
+    final formattedEndHour =
+        formatter.format(reservation.endDateTime.toLocal());
+
     return InkWell(
         onTap: () {
           Navigator.push<String>(
@@ -113,7 +121,7 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
                         children: [
                           Icon(Icons.access_time),
                           const SizedBox(width: 8.0),
-                          Text(reservation.getHourInterval()),
+                          Text('$formattedStartHour - $formattedEndHour'),
                         ],
                       ),
                       Row(

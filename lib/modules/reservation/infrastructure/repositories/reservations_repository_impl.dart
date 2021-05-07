@@ -18,12 +18,14 @@ class ReservationsRepositoryImpl implements ReservationsRepository {
     required DateTime startHour,
     required int hoursCount,
   }) async {
+    final startHourUtc = startHour.toUtc().toIso8601String();
+
     final url = Uri.https(
       BASE_HOST,
       '/campuses/$campusId/cubicles/available',
       {
         "campusId": campusId,
-        "startHour": startHour.toIso8601String(),
+        "startHour": startHourUtc,
         "hours": "$hoursCount",
       },
     );
@@ -61,10 +63,13 @@ class ReservationsRepositoryImpl implements ReservationsRepository {
       headers: {'Authorization': 'Bearer $token'},
       body: {
         "cubicleId": cubicleId,
-        "startTime": startTime.toIso8601String(),
-        "endTime": endTime.toIso8601String()
+        "startTime": startTime.toUtc().toIso8601String(),
+        "endTime": endTime.toUtc().toIso8601String()
       },
     );
+
+    print(startTime.toUtc().toIso8601String());
+    print(endTime.toUtc().toIso8601String());
 
     if (response.statusCode != HttpStatus.created) {
       final responseError = ServerFailure.fromMap(

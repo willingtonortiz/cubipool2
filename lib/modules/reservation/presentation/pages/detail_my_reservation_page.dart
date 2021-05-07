@@ -8,6 +8,7 @@ import 'package:cubipool2/shared/models/response_error.dart';
 import 'package:cubipool2/shared/pages/qr_code_scanner_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class DetailMyReservationPaage extends StatefulWidget {
   final Reservation reservation;
@@ -51,6 +52,13 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPaage> {
 
   @override
   Widget build(BuildContext context) {
+    final formatter = DateFormat.Hm();
+
+    final formattedStartHour =
+        formatter.format(widget.reservation.startDateTime.toLocal());
+    final formattedEndHour =
+        formatter.format(widget.reservation.endDateTime.toLocal());
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Detalle de cubiculo'),
@@ -80,7 +88,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPaage> {
                     children: [
                       Icon(Icons.access_time),
                       const SizedBox(width: 8.0),
-                      Text(widget.reservation.getHourInterval()),
+                      Text('$formattedStartHour - $formattedEndHour'),
                     ],
                   ),
                   const SizedBox(height: 16.0),
@@ -132,7 +140,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPaage> {
 
   Widget _buildActivationButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: !_isButtonActivated() ? _activateCubicle : null,
+      onPressed: _isButtonActivated() ? _activateCubicle : null,
       style: ElevatedButton.styleFrom(primary: Colors.green),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -181,7 +189,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPaage> {
             "activatorUsername": activatorUsername,
           },
         );
-        if (response.statusCode != HttpStatus.ok) {
+        if (response.statusCode != HttpStatus.created) {
           errors = jsonDecode(response.body);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(errors['errors'][0])),
@@ -189,7 +197,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPaage> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Se activó el su reserva correctamente'),
+              content: Text('Se activó su reserva correctamente'),
               backgroundColor: Colors.green,
             ),
           );
