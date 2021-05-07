@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
@@ -12,8 +13,12 @@ void main() async {
   await di.init();
 
   // Hive
-  final dir = await getApplicationDocumentsDirectory();
-  Hive.init(dir.path);
+  if (kIsWeb) {
+    print('WEB');
+  } else {
+    final dir = await getApplicationDocumentsDirectory();
+    Hive.init(dir.path);
+  }
 
   runApp(
     ProviderScope(

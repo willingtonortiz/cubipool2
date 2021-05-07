@@ -12,6 +12,18 @@
       "request": "launch",
       "type": "dart",
       "deviceId": "emulator-5554"
+    },
+    {
+      "name": "Chrome",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome"
+    },
+    {
+      "name": "Windows",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "windows"
     }
   ],
   "compounds": [
