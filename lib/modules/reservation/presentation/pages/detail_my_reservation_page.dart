@@ -66,7 +66,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPaage> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.weekend),
+                      Icon(Icons.biotech),
                       const SizedBox(width: 8.0),
                       Text(
                         'Cubiculo ${widget.reservation.cubicleCode}',
@@ -78,7 +78,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPaage> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.timer),
+                      Icon(Icons.access_time),
                       const SizedBox(width: 8.0),
                       Text(widget.reservation.getHourInterval()),
                     ],
@@ -87,7 +87,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPaage> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.ac_unit),
+                      Icon(Icons.business),
                       const SizedBox(width: 8.0),
                       Text(widget.reservation.campusName),
                     ],
@@ -96,7 +96,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPaage> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.wheelchair_pickup_sharp),
+                      Icon(Icons.person),
                       const SizedBox(width: 8.0),
                       Text('${widget.reservation.seats} Asientos'),
                     ],
@@ -105,7 +105,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPaage> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.dock_sharp),
+                      Icon(Icons.sticky_note_2_outlined),
                       const SizedBox(width: 8.0),
                       Text(widget.reservation.type),
                     ],

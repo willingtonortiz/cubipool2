@@ -40,8 +40,6 @@ class _ProfilePageState extends State<ProfilePage> {
             SnackBar(content: Text(state.message)),
           );
         } else if (state is MyReservationsState) {
-          print(state);
-          print(state.reservations);
 
           await Navigator.push<String>(
             context,

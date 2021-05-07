@@ -56,13 +56,17 @@ class ReservationsRepositoryImpl implements ReservationsRepository {
   }) async {
     final url = Uri.parse('$BASE_URL/reservations');
     final token = await JwtService.getToken();
-    final response =
-        await http.get(url, headers: {'Authorization': 'Bearer $token'});
+    final response = await http.post(
+      url,
+      headers: {'Authorization': 'Bearer $token'},
+      body: {
+        "cubicleId": cubicleId,
+        "startTime": startTime.toIso8601String(),
+        "endTime": endTime.toIso8601String()
+      },
+    );
 
-    print(response.statusCode);
-    print(response.body);
-
-    if (response.statusCode != HttpStatus.ok) {
+    if (response.statusCode != HttpStatus.created) {
       final responseError = ServerFailure.fromMap(
         jsonDecode(response.body),
       );

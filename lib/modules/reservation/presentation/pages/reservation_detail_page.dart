@@ -90,7 +90,7 @@ class ReservationDetailPage extends StatelessWidget {
             final either = await reserveCubicle.execute(ReserveCubicleParams(
               cubicleId: reservation.cubicleId,
               startTime: reservation.startHour,
-              endTime: reservation.endHour.add(Duration(hours: 2)),
+              endTime: reservation.endHour,
             ));
 
             either.fold(

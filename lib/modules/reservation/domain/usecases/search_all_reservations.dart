@@ -41,7 +41,7 @@ class SearchAllReservations
                 cubicleId: e.cubicleId,
                 cubicleCode: e.cubicleCode,
                 startHour: DateTime.parse(e.startTime),
-                endHour: DateTime.parse(e.endTime),
+                endHour: DateTime.parse(e.endTime).add(Duration(hours: 2)),
               ),
             )
             .toList();

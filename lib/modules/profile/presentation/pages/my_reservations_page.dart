@@ -86,7 +86,6 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
   Widget _buildReservationItem(BuildContext context, Reservation reservation) {
     return InkWell(
         onTap: () {
-          print("A");
           Navigator.push<String>(
             context,
             MaterialPageRoute(
