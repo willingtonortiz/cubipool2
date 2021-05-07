@@ -1,3 +1,4 @@
+import 'package:cubipool2/modules/reservation/domain/usecases/reserve_cubicle.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:cubipool2/modules/reservation/domain/repositories/reservations_repository.dart';
@@ -19,6 +20,7 @@ Future<void> init() async {
   injector.registerLazySingleton(() => GetAllCampus(injector()));
   injector.registerLazySingleton(() => GetAllReservations(injector()));
   injector.registerLazySingleton(() => SearchAllReservations(injector()));
+  injector.registerLazySingleton(() => ReserveCubicle(injector()));
 
   // Repositories
   injector.registerLazySingleton<CampusRepository>(

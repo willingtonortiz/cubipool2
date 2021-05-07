@@ -10,4 +10,10 @@ abstract class ReservationsRepository {
     required DateTime startHour,
     required int hoursCount,
   });
+
+  Future<Either<Failure, void>> reserveCubicle({
+    required String cubicleId,
+    required DateTime startTime,
+    required DateTime endTime,
+  });
 }

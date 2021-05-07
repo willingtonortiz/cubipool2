@@ -1,3 +1,4 @@
+import 'package:cubipool2/modules/reservation/domain/usecases/reserve_cubicle.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:cubipool2/injection_container.dart';
@@ -7,6 +8,7 @@ import 'package:cubipool2/modules/reservation/presentation/provider/search_reser
 
 final getAllCampus = injector.get<GetAllCampus>();
 final getAllReservations = injector.get<SearchAllReservations>();
+final reserveCubicle = injector.get<ReserveCubicle>();
 
 final getAllCampusProvider = Provider<GetAllCampus>((ref) => getAllCampus);
 final getAllReservationsProvider =
