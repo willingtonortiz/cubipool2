@@ -36,16 +36,8 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
             _buildActiveReservation(context, _activeReservation),
             const SizedBox(height: 20.0),
             Text('Finalizadas'),
-            const SizedBox(height: 10.0),
-            Expanded(
-              child: ListView.builder(
-                itemCount: reservations.length,
-                itemBuilder: (_, index) => _buildReservationItem(
-                  context,
-                  reservations[index],
-                ),
-              ),
-            )
+            _buildFinishedReservations(context, reservations),
+            const SizedBox(height: 10.0)
           ])),
         ));
   }
@@ -57,12 +49,28 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
         : Text('No cuentas con reservas activas');
   }
 
+  Widget _buildFinishedReservations(
+      BuildContext context, List<Reservation> reservations) {
+    return (reservations.length > 0)
+        ? Expanded(
+            child: ListView.builder(
+              itemCount: reservations.length,
+              itemBuilder: (_, index) => _buildReservationItem(
+                context,
+                reservations[index],
+              ),
+            ),
+          )
+        : Text('No cuentas con reservas finalizadas');
+  }
+
   void validateActiveReservation() {
     this
         .reservations
         .sort((r1, r2) => r2.startDateTime.compareTo(r1.startDateTime));
 
-    if (this.reservations[0].type != "FINISHED") {
+    if (this.reservations.length > 0 &&
+        this.reservations[0].type != "FINISHED") {
       setState(() {
         _activeReservation = this.reservations[0];
         reservations = this.reservations.sublist(1);
