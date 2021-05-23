@@ -10,9 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-class DetailMyReservationPaage extends StatefulWidget {
+class DetailMyReservationPage extends StatefulWidget {
   final Reservation reservation;
-  const DetailMyReservationPaage({
+  const DetailMyReservationPage({
     Key? key,
     required this.reservation,
   }) : super(key: key);
@@ -21,7 +21,7 @@ class DetailMyReservationPaage extends StatefulWidget {
   _DetailMyReservationPaage createState() => _DetailMyReservationPaage();
 }
 
-class _DetailMyReservationPaage extends State<DetailMyReservationPaage> {
+class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
   late Timer _timer;
   late DateTime startDateTime;
   late bool visibleButton;
@@ -124,7 +124,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPaage> {
                     children: [
                       Icon(Icons.calendar_today),
                       const SizedBox(width: 8.0),
-                      Text(widget.reservation.getDate()),
+                      Text(widget.reservation.getDDMMYYYYStartDate()),
                     ],
                   ),
                 ],

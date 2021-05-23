@@ -2,6 +2,12 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
+// TODO: Verify values
+class ReservationStatus {
+  static const String ACTIVE = "ACTIVE";
+  static const String SHARED = "SHARED";
+}
+
 class Reservation {
   final String id;
   final String cubicleCode;
@@ -20,6 +26,20 @@ class Reservation {
     required this.seats,
     required this.type,
   });
+
+  bool isShared() {
+    return type == ReservationStatus.SHARED;
+  }
+
+  bool isActive() {
+    return type == ReservationStatus.ACTIVE;
+  }
+
+  String getDDMMYYYYStartDate() =>
+      DateFormat('dd/MM/yyyy').format(startDateTime);
+
+  String getHourInterval() =>
+      '${startDateTime.hour}:00 - ${endDateTime.hour}:00';
 
   @override
   String toString() =>
@@ -54,8 +74,41 @@ class Reservation {
   factory Reservation.fromJson(String source) =>
       Reservation.fromMap(json.decode(source));
 
-  String getDate() => DateFormat('dd/MM/yyyy').format(startDateTime);
+  Reservation copyWith({
+    String? id,
+    String? cubicleCode,
+    String? campusName,
+    DateTime? startDateTime,
+    DateTime? endDateTime,
+    int? seats,
+    String? type,
+  }) {
+    return Reservation(
+      id: id ?? this.id,
+      cubicleCode: cubicleCode ?? this.cubicleCode,
+      campusName: campusName ?? this.campusName,
+      startDateTime: startDateTime ?? this.startDateTime,
+      endDateTime: endDateTime ?? this.endDateTime,
+      seats: seats ?? this.seats,
+      type: type ?? this.type,
+    );
+  }
 
-  String getHourInterval() =>
-      '${startDateTime.hour}:00 - ${endDateTime.hour}:00';
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Reservation && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        cubicleCode.hashCode ^
+        campusName.hashCode ^
+        startDateTime.hashCode ^
+        endDateTime.hashCode ^
+        seats.hashCode ^
+        type.hashCode;
+  }
 }

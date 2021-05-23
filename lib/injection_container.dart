@@ -1,3 +1,6 @@
+import 'package:cubipool2/modules/profile/domain/repositories/assistance_repository.dart';
+import 'package:cubipool2/modules/profile/domain/usecases/get_my_assistance.dart';
+import 'package:cubipool2/modules/profile/infrastructure/repositories/assistance_repository_impl.dart';
 import 'package:cubipool2/modules/reservation/domain/usecases/reserve_cubicle.dart';
 import 'package:get_it/get_it.dart';
 
@@ -21,6 +24,7 @@ Future<void> init() async {
   injector.registerLazySingleton(() => GetAllReservations(injector()));
   injector.registerLazySingleton(() => SearchAllReservations(injector()));
   injector.registerLazySingleton(() => ReserveCubicle(injector()));
+  injector.registerLazySingleton(() => GetMyAssistance(injector()));
 
   // Repositories
   injector.registerLazySingleton<CampusRepository>(
@@ -31,5 +35,8 @@ Future<void> init() async {
   );
   injector.registerLazySingleton<ReservationsRepository>(
     () => ReservationsRepositoryImpl(),
+  );
+  injector.registerLazySingleton<AssistanceRepository>(
+        () => AssistanceRepositoryImpl(),
   );
 }

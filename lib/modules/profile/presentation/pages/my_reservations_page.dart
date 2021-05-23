@@ -98,7 +98,7 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  DetailMyReservationPaage(reservation: reservation),
+                  DetailMyReservationPage(reservation: reservation),
             ),
           );
         },
@@ -128,7 +128,7 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
                         children: [
                           Icon(Icons.calendar_today),
                           const SizedBox(width: 8.0),
-                          Text(reservation.getDate()),
+                          Text(reservation.getDDMMYYYYStartDate()),
                         ],
                       ),
                     ])),
