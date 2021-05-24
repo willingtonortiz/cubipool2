@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 class ReservationStatus {
   static const String ACTIVE = "ACTIVE";
   static const String SHARED = "SHARED";
+  static const String NOT_ACTIVE = "NOT_ACTIVE";
 }
 
 class Reservation {
@@ -27,13 +28,9 @@ class Reservation {
     required this.type,
   });
 
-  bool isShared() {
-    return type == ReservationStatus.SHARED;
-  }
-
-  bool isActive() {
-    return type == ReservationStatus.ACTIVE;
-  }
+  bool isShared() => type == ReservationStatus.SHARED;
+  bool isActive() => type == ReservationStatus.ACTIVE;
+  bool isNotActive() => type == ReservationStatus.NOT_ACTIVE;
 
   String getDDMMYYYYStartDate() =>
       DateFormat('dd/MM/yyyy').format(startDateTime);
