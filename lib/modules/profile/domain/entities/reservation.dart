@@ -1,13 +1,7 @@
 import 'dart:convert';
 
+import 'package:cubipool2/core/constants/reservation_status.dart';
 import 'package:intl/intl.dart';
-
-// TODO: Verify values
-class ReservationStatus {
-  static const String ACTIVE = "ACTIVE";
-  static const String SHARED = "SHARED";
-  static const String NOT_ACTIVE = "NOT_ACTIVE";
-}
 
 class Reservation {
   final String id;

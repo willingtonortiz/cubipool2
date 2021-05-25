@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cubipool2/core/constants/reservation_status.dart';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 

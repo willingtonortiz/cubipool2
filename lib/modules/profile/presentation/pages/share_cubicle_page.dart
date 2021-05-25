@@ -1,8 +1,7 @@
-import 'package:cubipool2/shared/widgets/notification_dialog.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cubipool2/shared/widgets/notification_dialog.dart';
 import 'package:cubipool2/modules/profile/domain/entities/reservation.dart';
-import 'package:cubipool2/shared/widgets/async_confirmation_dialog.dart';
 
 class ShareCubiclePage extends StatefulWidget {
   final Reservation reservation;

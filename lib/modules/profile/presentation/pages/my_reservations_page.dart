@@ -93,27 +93,11 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
 
     return InkWell(
       onTap: () {
-        // Navigator.push<String>(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) =>
-        //         DetailMyReservationPage(reservation: reservation),
-        //   ),
-        // );
         Navigator.push<String>(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailMyReservationPage(
-              reservation: Reservation(
-                id: 'PEPE',
-                campusName: 'PEPE',
-                cubicleCode: '963',
-                startDateTime: DateTime(2021, 5, 23, 10),
-                endDateTime: DateTime(2021, 5, 23, 11),
-                seats: 4,
-                type: ReservationStatus.ACTIVE,
-              ),
-            ),
+            builder: (context) =>
+                DetailMyReservationPage(reservation: reservation),
           ),
         );
       },

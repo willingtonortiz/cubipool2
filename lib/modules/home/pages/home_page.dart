@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:cubipool2/modules/profile/presentation/pages/my_assistance_page.dart';
 import 'package:cubipool2/modules/profile/presentation/pages/profile_page.dart';
 import 'package:cubipool2/modules/reservation/presentation/pages/search_reservation_page.dart';
 import 'package:cubipool2/modules/search/pages/search_page.dart';
