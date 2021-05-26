@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cubipool2/core/utils/reservation_states.dart';
 import 'package:intl/intl.dart';
 
 class Reservation {
@@ -9,7 +10,7 @@ class Reservation {
   final DateTime startDateTime;
   final DateTime endDateTime;
   final int seats;
-  final String type;
+  final ReserveStates type;
 
   Reservation({
     required this.id,

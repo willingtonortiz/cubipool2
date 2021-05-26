@@ -66,6 +66,8 @@ class ReservationsRepositoryImpl implements ReservationsRepository {
       },
     );
 
+    print(startTime.toIso8601String());
+    print(endTime.toIso8601String());
     if (response.statusCode != HttpStatus.created) {
       final responseError = ServerFailure.fromMap(
         jsonDecode(response.body),

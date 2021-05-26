@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:cubipool2/core/configuration/constants.dart';
+import 'package:cubipool2/core/utils/reservation_states.dart';
 import 'package:cubipool2/modules/auth/services/jwt_service.dart';
 import 'package:cubipool2/modules/profile/domain/entities/reservation.dart';
 import 'package:cubipool2/shared/models/response_error.dart';
@@ -107,7 +108,8 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPaage> {
                     children: [
                       Icon(Icons.sticky_note_2_outlined),
                       const SizedBox(width: 8.0),
-                      Text(widget.reservation.type),
+                      Text(ReserveStates
+                          .values[widget.reservation.type.index].translation!),
                     ],
                   ),
                   const SizedBox(height: 16.0),

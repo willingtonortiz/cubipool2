@@ -1,3 +1,4 @@
+import 'package:cubipool2/core/utils/reservation_states.dart';
 import 'package:cubipool2/modules/profile/domain/entities/reservation.dart';
 import 'package:cubipool2/modules/reservation/presentation/pages/detail_my_reservation_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -144,7 +145,8 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
                         children: [
                           Icon(Icons.sticky_note_2_outlined),
                           const SizedBox(width: 8.0),
-                          Text(reservation.type),
+                          Text(ReserveStates
+                              .values[reservation.type.index].translation!),
                         ],
                       ),
                     ])),
