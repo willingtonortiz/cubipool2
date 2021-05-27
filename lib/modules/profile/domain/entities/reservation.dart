@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cubipool2/core/utils/reservation_states.dart';
+import 'package:cubipool2/core/constants/reservation_status.dart';
 import 'package:intl/intl.dart';
 
 class Reservation {
@@ -10,7 +10,7 @@ class Reservation {
   final DateTime startDateTime;
   final DateTime endDateTime;
   final int seats;
-  final ReserveStates type;
+  final String type;
 
   Reservation({
     required this.id,
@@ -21,6 +21,16 @@ class Reservation {
     required this.seats,
     required this.type,
   });
+
+  bool isShared() => type == ReservationStatus.SHARED;
+  bool isActive() => type == ReservationStatus.ACTIVE;
+  bool isNotActive() => type == ReservationStatus.NOT_ACTIVE;
+
+  String getDDMMYYYYStartDate() =>
+      DateFormat('dd/MM/yyyy').format(startDateTime);
+
+  String getHourInterval() =>
+      '${startDateTime.hour}:00 - ${endDateTime.hour}:00';
 
   @override
   String toString() =>
@@ -55,8 +65,41 @@ class Reservation {
   factory Reservation.fromJson(String source) =>
       Reservation.fromMap(json.decode(source));
 
-  String getDate() => DateFormat('dd/MM/yyyy').format(startDateTime);
+  Reservation copyWith({
+    String? id,
+    String? cubicleCode,
+    String? campusName,
+    DateTime? startDateTime,
+    DateTime? endDateTime,
+    int? seats,
+    String? type,
+  }) {
+    return Reservation(
+      id: id ?? this.id,
+      cubicleCode: cubicleCode ?? this.cubicleCode,
+      campusName: campusName ?? this.campusName,
+      startDateTime: startDateTime ?? this.startDateTime,
+      endDateTime: endDateTime ?? this.endDateTime,
+      seats: seats ?? this.seats,
+      type: type ?? this.type,
+    );
+  }
 
-  String getHourInterval() =>
-      '${startDateTime.hour}:00 - ${endDateTime.hour}:00';
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Reservation && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        cubicleCode.hashCode ^
+        campusName.hashCode ^
+        startDateTime.hashCode ^
+        endDateTime.hashCode ^
+        seats.hashCode ^
+        type.hashCode;
+  }
 }

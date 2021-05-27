@@ -35,16 +35,20 @@ class SearchAllReservations
     return reservationsEither.fold(
       left,
       (values) {
-        final parsedValues = values
-            .map(
-              (e) => Reservation(
-                cubicleId: e.cubicleId,
-                cubicleCode: e.cubicleCode,
-                startHour: DateTime.parse(e.startTime),
-                endHour: DateTime.parse(e.endTime).add(Duration(hours: 2)),
-              ),
-            )
-            .toList();
+        final parsedValues = values.map(
+          (e) {
+            final startHour = DateTime.parse(e.startTime).toLocal();
+            final endHour =
+                DateTime.parse(e.startTime).add(Duration(hours: 2)).toLocal();
+
+            return Reservation(
+              cubicleId: e.cubicleId,
+              cubicleCode: e.cubicleCode,
+              startHour: startHour,
+              endHour: endHour,
+            );
+          },
+        ).toList();
 
         return Right(parsedValues);
       },

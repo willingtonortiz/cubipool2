@@ -17,6 +17,7 @@ class ServerFailure extends Failure {
     if (map.containsKey('error')) {
       return ServerFailure([map['error']]);
     } else {
+      print(map);
       return ServerFailure(
         List<String>.from(map['errors']),
       );

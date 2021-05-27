@@ -28,13 +28,7 @@ class _HomePageState extends State<HomePage> {
           });
         },
         children: [
-          // ReservationDetailPage(),
-          // ReservationResultsPage(),
-          // NotFoundPage(
-          //   message: 'No se encontraron cubiculos disponibles',
-          //   imageUrl:
-          //       'https://cdn.discordapp.com/attachments/823716132732403712/835549753865273384/b00ba99ad82a972d4e5a481385d8e52e.png',
-          // ),
+          // MyAssistancePage(),
           ReservationPage(),
           SearchPage(),
           ProfilePage(),

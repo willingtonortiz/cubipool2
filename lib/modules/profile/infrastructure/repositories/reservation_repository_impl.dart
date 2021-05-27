@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:dartz/dartz.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:cubipool2/core/configuration/constants.dart';
 import 'package:cubipool2/modules/auth/services/jwt_service.dart';
 import 'package:cubipool2/modules/profile/domain/entities/reservation.dart';
 import 'package:cubipool2/modules/profile/domain/repositories/reservations_repository.dart';
 import 'package:cubipool2/modules/profile/infrastructure/dto/get_all_reservations_response.dto.dart';
-import 'package:dartz/dartz.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:cubipool2/core/error/failures.dart';
 

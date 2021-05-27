@@ -1,4 +1,5 @@
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
+import 'package:cubipool2/modules/profile/presentation/pages/my_assistance_page.dart';
 import 'package:cubipool2/modules/profile/presentation/pages/my_reservations_page.dart';
 import 'package:cubipool2/modules/profile/presentation/provider/profile_state.dart';
 import 'package:cubipool2/modules/profile/presentation/provider/providers.dart';
@@ -40,7 +41,6 @@ class _ProfilePageState extends State<ProfilePage> {
             SnackBar(content: Text(state.message)),
           );
         } else if (state is MyReservationsState) {
-
           await Navigator.push<String>(
             context,
             MaterialPageRoute(
@@ -80,6 +80,10 @@ class _ProfilePageState extends State<ProfilePage> {
           ElevatedButton(
             onPressed: showMyReservations,
             child: Text('Mis reservas'),
+          ),
+          ElevatedButton(
+            onPressed: goToMyAssistancePage,
+            child: Text('Mi asistencia'),
           ),
           ElevatedButton(
             onPressed: showQRCode,
@@ -127,5 +131,12 @@ class _ProfilePageState extends State<ProfilePage> {
     );
 
     print(result);
+  }
+
+  void goToMyAssistancePage() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => MyAssistancePage()),
+    );
   }
 }
