@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'package:cubipool2/modules/search/domain/entities/campus.dart';
 
+import 'publication_detail_page.dart';
+
 class PublicationSearchResultsPage extends StatelessWidget {
   final List<Publication> publications;
   final Campus campus;
@@ -43,8 +45,6 @@ class PublicationSearchResultsPage extends StatelessWidget {
       vertical: -2.0,
       horizontal: 4.0,
     );
-    ;
-    final formatter = DateFormat.Hm();
 
     return Wrap(
       spacing: 8.0,
@@ -129,15 +129,15 @@ class PublicationSearchResultsPage extends StatelessWidget {
         ),
       ),
       onTap: () async {
-        // await Navigator.push<String>(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => ReservationDetailPage(
-        //       campus: campus,
-        //       publication: publication,
-        //     ),
-        //   ),
-        // );
+        await Navigator.push<String>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PublicationDetailPage(
+              campus: campus,
+              publication: publication,
+            ),
+          ),
+        );
       },
     );
   }
