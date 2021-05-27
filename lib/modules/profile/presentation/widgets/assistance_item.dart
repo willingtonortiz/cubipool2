@@ -1,3 +1,4 @@
+import 'package:cubipool2/core/utils/reservation_status_translate.dart';
 import 'package:cubipool2/modules/profile/presentation/pages/assistance_detail_page.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,7 @@ class AssistanceItem extends StatelessWidget {
             Row(children: [
               Icon(Icons.library_books_rounded),
               const SizedBox(width: 8),
-              Text(assistance.type),
+              Text(ReservationStatusTranslate.getTranslation(assistance.type)),
             ]),
           ]),
         ),

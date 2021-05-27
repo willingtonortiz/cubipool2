@@ -25,6 +25,8 @@ class Reservation {
   bool isShared() => type == ReservationStatus.SHARED;
   bool isActive() => type == ReservationStatus.ACTIVE;
   bool isNotActive() => type == ReservationStatus.NOT_ACTIVE;
+  bool isFinished() => type == ReservationStatus.FINISHED;
+  bool isCancelled() => type == ReservationStatus.CANCELLED;
 
   String getDDMMYYYYStartDate() =>
       DateFormat('dd/MM/yyyy').format(startDateTime);

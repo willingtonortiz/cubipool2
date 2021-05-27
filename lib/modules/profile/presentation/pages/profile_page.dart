@@ -1,15 +1,13 @@
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
 import 'package:cubipool2/modules/profile/presentation/pages/my_assistance_page.dart';
-import 'package:cubipool2/modules/profile/presentation/pages/my_reservations_page.dart';
-import 'package:cubipool2/modules/profile/presentation/provider/profile_state.dart';
-import 'package:cubipool2/modules/profile/presentation/provider/providers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cubipool2/shared/pages/qr_code_scanner_page.dart';
 import 'package:cubipool2/shared/pages/qr_code_viewer_page.dart';
 import 'package:cubipool2/modules/auth/pages/login_page.dart';
 import 'package:cubipool2/modules/auth/services/jwt_service.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'my_reservations_page.dart';
 
 class ProfilePage extends StatefulWidget {
   static const PAGE_ROUTE = '/profile/qr';
@@ -27,53 +25,12 @@ class _ProfilePageState extends State<ProfilePage> {
         title: Text('Perfil'),
       ),
       body: SafeArea(
-        child: _buildApp(),
+        child: _buildBody(context),
       ),
     );
   }
 
-  Widget _buildApp() {
-    return ProviderListener<ProfileState>(
-      provider: profileNotifierProvider.state,
-      onChange: (context, state) async {
-        if (state is ErrorState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
-        } else if (state is MyReservationsState) {
-          await Navigator.push<String>(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  MyReservationsPage(reservations: state.reservations),
-            ),
-          );
-
-          context.read(profileNotifierProvider).getInitialData();
-        }
-      },
-      child: Consumer(
-        builder: (context, watch, child) {
-          final state = watch(profileNotifierProvider.state);
-
-          if (state is InitialState) {
-            return _buildBody(context, state);
-          } else if (state is LoadingState) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          return Container();
-        },
-      ),
-    );
-  }
-
-  Widget _buildBody(
-    BuildContext context,
-    InitialState state,
-  ) {
+  Widget _buildBody(BuildContext context) {
     return Center(
       child: Column(
         children: [
@@ -108,8 +65,11 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.pushReplacementNamed(context, LoginPage.PAGE_ROUTE);
   }
 
-  void showMyReservations() {
-    context.read(profileNotifierProvider).getAllReservations();
+  void showMyReservations() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => MyReservationsPage()),
+    );
   }
 
   Future<void> showQRCode() async {
