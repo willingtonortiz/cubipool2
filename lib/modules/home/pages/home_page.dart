@@ -1,8 +1,8 @@
+import 'package:cubipool2/modules/search/presentation/pages/search_publication_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cubipool2/modules/profile/presentation/pages/profile_page.dart';
 import 'package:cubipool2/modules/reservation/presentation/pages/search_reservation_page.dart';
-import 'package:cubipool2/modules/search/pages/search_page.dart';
 
 class HomePage extends StatefulWidget {
   static const PAGE_ROUTE = '/home';
@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           // MyAssistancePage(),
           ReservationPage(),
-          SearchPage(),
+          PublicationPage(),
           ProfilePage(),
         ],
       ),
