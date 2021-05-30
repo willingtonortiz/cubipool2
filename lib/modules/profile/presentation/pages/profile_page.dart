@@ -1,5 +1,6 @@
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
 import 'package:cubipool2/modules/profile/presentation/pages/my_assistance_page.dart';
+import 'package:cubipool2/modules/profile/presentation/widgets/profile_option.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cubipool2/shared/pages/qr_code_scanner_page.dart';
@@ -22,7 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil'),
+        title: Text('Mi Perfil'),
       ),
       body: SafeArea(
         child: _buildBody(context),
@@ -33,22 +34,37 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildBody(BuildContext context) {
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          ElevatedButton(
-            onPressed: showMyReservations,
-            child: Text('Mis reservas'),
+          Container(
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 60,
+                  backgroundColor: Colors.grey,
+                ),
+                SizedBox(height: 10.0),
+                Text('Name'),
+                Text('Username'),
+                Text('Points'),
+              ],
+            ),
           ),
-          ElevatedButton(
-            onPressed: goToMyAssistancePage,
-            child: Text('Mi asistencia'),
-          ),
-          ElevatedButton(
-            onPressed: showQRCode,
-            child: Text('Código QR'),
-          ),
-          ElevatedButton(
-            onPressed: scanQRCode,
-            child: Text('Escanear Código QR'),
+          Container(
+            child: Column(
+              children: [
+                ProfileOption(onTap: showMyReservations, title: 'Mis reservas'),
+                ProfileOption(
+                    onTap: goToMyAssistancePage,
+                    title: 'Cucículos a los que asistiré'),
+                ProfileOption(onTap: () => {}, title: 'Recompensas'),
+                ProfileOption(onTap: () => {}, title: 'Historial de Puntos'),
+                ProfileOption(onTap: showQRCode, title: 'Mostrar código QR'),
+                SizedBox(
+                  height: 20.0,
+                ),
+              ],
+            ),
           ),
           ElevatedButton(
             onPressed: logout,
