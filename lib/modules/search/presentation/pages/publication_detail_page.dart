@@ -1,5 +1,7 @@
 import 'package:cubipool2/modules/search/domain/entities/campus.dart';
 import 'package:cubipool2/modules/search/domain/entities/publication.dart';
+import 'package:cubipool2/shared/widgets/async_confirmation_dialog.dart';
+import 'package:cubipool2/shared/widgets/notification_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
@@ -79,7 +81,45 @@ class PublicationDetailPage extends StatelessWidget {
 
   Widget _buildReservationButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () async {},
+      onPressed: () async {
+        bool isJoinSuccessful = false;
+        bool hasCancelled = false;
+        final dialog = AsyncConfirmationDialog(
+          title: 'Confirmación de Asistencia',
+          content: '¿Estás seguro que quieres asistir a este cubículo?',
+          onOk: () async {
+            // TODO
+          },
+          onCancel: () async => hasCancelled = true,
+        );
+        await showDialog(
+          context: context,
+          builder: (context) => dialog,
+          barrierDismissible: false,
+        );
+        if (hasCancelled) {
+          return;
+        }
+
+        final notificationMessage = isJoinSuccessful
+            ? 'Confirmación de Reserva'
+            : 'Algo salío mal... :c';
+
+        final reserveNotification = NotificationDialog(
+          title: notificationMessage,
+          onOk: () async {
+            if (isJoinSuccessful) {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            }
+          },
+        );
+        await showDialog(
+          context: context,
+          builder: (context) => reserveNotification,
+          barrierDismissible: false,
+        );
+      },
       child: Text('Asistir'),
     );
   }
