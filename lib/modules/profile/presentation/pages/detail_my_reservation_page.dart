@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:cubipool2/core/constants/reservation_status.dart';
 import 'package:cubipool2/core/utils/reservation_status_translate.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -31,11 +32,13 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
   late Timer _timer;
   late DateTime startDate;
   late bool isReservationNotActive;
+  late String type;
 
   @override
   void initState() {
     super.initState();
     final reservation = widget.reservation;
+    type = widget.reservation.type.toString();
     isReservationNotActive = reservation.isNotActive();
     startDate = reservation.startDateTime;
 
@@ -125,8 +128,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
                       children: [
                         Icon(Icons.sticky_note_2_outlined),
                         const SizedBox(width: 8.0),
-                        Text(ReservationStatusTranslate.getTranslation(
-                            widget.reservation.type)),
+                        Text(ReservationStatusTranslate.getTranslation(type)),
                       ],
                     ),
                     const SizedBox(height: 16.0),
@@ -190,11 +192,16 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
 
   get remainingTime {
     final reservation = widget.reservation;
-    final endActive = reservation.startDateTime.add(ACTIVATION_PERIOD);
-    final activationPeriodEnd = endActive.difference(DateTime.now());
+    late var endActive;
+    late var activationPeriodEnd;
+    if (DateTime.now().isBefore(reservation.startDateTime)) {
+      endActive = reservation.startDateTime;
+    } else {
+      endActive = reservation.startDateTime.add(ACTIVATION_PERIOD);
+    }
+    activationPeriodEnd = endActive.difference(DateTime.now());
 
     String twoDigits(int n) => n.toString().padLeft(2, "0");
-
     String twoDigitHours = twoDigits(activationPeriodEnd.inHours);
     String twoDigitMinutes =
         twoDigits(activationPeriodEnd.inMinutes.remainder(60));
@@ -237,6 +244,9 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
               backgroundColor: Colors.green,
             ),
           );
+          setState(() {
+            type = ReservationStatus.ACTIVE;
+          });
         }
 
         setState(() {
