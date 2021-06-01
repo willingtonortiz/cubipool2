@@ -23,7 +23,8 @@ class GetAllReservations implements UseCase<GetMyReservationsResult, NoParams> {
 
   @override
   Future<Either<Failure, GetMyReservationsResult>> execute(
-      NoParams params) async {
+    NoParams params,
+  ) async {
     final either = await repository.getAllReservations();
     return either.fold(left, getReservationsResult);
   }

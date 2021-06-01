@@ -1,3 +1,6 @@
+import 'package:cubipool2/core/error/failures.dart';
+import 'package:cubipool2/injection_container.dart';
+import 'package:cubipool2/modules/profile/domain/usecases/share_cubicle.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cubipool2/shared/widgets/notification_dialog.dart';
@@ -16,8 +19,9 @@ class ShareCubiclePage extends StatefulWidget {
 }
 
 class _ShareCubiclePageState extends State<ShareCubiclePage> {
-  int? _selectedSeats;
   final descriptionController = TextEditingController();
+  int? _selectedSeats;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,9 @@ class _ShareCubiclePageState extends State<ShareCubiclePage> {
                 const SizedBox(height: 32),
                 _buildDescriptionInput(),
                 const SizedBox(height: 32),
-                _buildPublishButton(),
+                _isLoading
+                    ? CircularProgressIndicator()
+                    : _buildPublishButton(),
               ],
             ),
           ),
@@ -96,10 +102,7 @@ class _ShareCubiclePageState extends State<ShareCubiclePage> {
   Widget _buildPublishButton() {
     return ElevatedButton(
       onPressed: () async {
-        final description = descriptionController.text;
-        print(_selectedSeats);
-        print(description);
-
+        final description = descriptionController.text.trim();
         if (_selectedSeats == null || description.isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Debes completar los campos')),
@@ -107,23 +110,47 @@ class _ShareCubiclePageState extends State<ShareCubiclePage> {
           return;
         }
 
-        // TODO: Call http service and use either
+        setState(() => _isLoading = true);
+        final useCase = injector.get<ShareCubicle>();
+        final either = await useCase.execute(ShareCubicleParams(
+          reservationId: widget.reservation.id,
+          description: description,
+          sharedSeats: _selectedSeats!,
+        ));
+        setState(() => _isLoading = false);
 
-        final dialog = NotificationDialog(
-          title: 'Cubículo compartido',
-          content: 'Tu cubículo se ha compartido exitosamente',
-          okText: 'Entiendo',
-          onOk: () async {
-            Navigator.of(context).pop();
+        either.fold(
+          (l) {
+            if (l is ServerFailure) {
+              showSharedCubicleFailureSnackbar(context, l.firstError);
+            }
           },
-        );
-
-        await showDialog(
-          context: context,
-          builder: (context) => dialog,
+          (r) => showSharedCubicleDialog(context),
         );
       },
       child: Text('Publicar'),
+    );
+  }
+
+  void showSharedCubicleFailureSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  void showSharedCubicleDialog(BuildContext context) async {
+    final dialog = NotificationDialog(
+      title: 'Cubículo compartido',
+      content: 'Tu cubículo se ha compartido exitosamente',
+      okText: 'Entiendo',
+      onOk: () async {
+        Navigator.of(context).pop();
+      },
+    );
+
+    await showDialog(
+      context: context,
+      builder: (context) => dialog,
     );
   }
 }
