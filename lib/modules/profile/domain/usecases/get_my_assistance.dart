@@ -30,14 +30,15 @@ class GetMyAssistance implements UseCase<GetMyAssistanceResult, NoParams> {
   }
 
   Either<Failure, GetMyAssistanceResult> getAssistanceResult(
-      List<Reservation> assists) {
+    List<Reservation> assists,
+  ) {
     final mappedAssists = mapDatesToLocal(assists);
-    final active = findActiveAssistance(mappedAssists);
-    final oldAssistance = findOldAsissts(mappedAssists);
+    final selected = findSharedAssistance(mappedAssists);
+    final filteredAssistance = filterSelectedAssist(mappedAssists, selected);
 
     final result = GetMyAssistanceResult(
-      active: active,
-      reservations: oldAssistance,
+      active: selected,
+      reservations: filteredAssistance,
     );
     return Right(result);
   }
@@ -51,12 +52,14 @@ class GetMyAssistance implements UseCase<GetMyAssistanceResult, NoParams> {
         .toList();
   }
 
-  Reservation? findActiveAssistance(List<Reservation> assists) {
-    // TODO: Find Active or Shared state
-    return assists.firstWhereOrNull((item) => item.isActive());
+  Reservation? findSharedAssistance(List<Reservation> assists) {
+    return assists.firstWhereOrNull((item) => item.isShared());
   }
 
-  List<Reservation> findOldAsissts(List<Reservation> assists) {
-    return assists.where((item) => !item.isActive()).toList();
+  List<Reservation> filterSelectedAssist(
+    List<Reservation> assists,
+    Reservation? selected,
+  ) {
+    return assists.where((item) => item != selected).toList();
   }
 }
