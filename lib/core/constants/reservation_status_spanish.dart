@@ -1,7 +1,7 @@
 class ReservationStatusSpanish {
-  static const String ACTIVE = "ACTIVA";
-  static const String CANCELLED = "CANCELADA";
-  static const String FINISHED = "TERMINADA";
-  static const String SHARED = "COMPARTIDA";
-  static const String NOT_ACTIVE = "NO ACTIVADA";
+  static const String ACTIVE = "Activa";
+  static const String CANCELLED = "Cancelada";
+  static const String FINISHED = "Terminada";
+  static const String SHARED = "Compartida";
+  static const String NOT_ACTIVE = "No activada";
 }

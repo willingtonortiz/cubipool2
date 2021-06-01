@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:cubipool2/core/utils/reservation_status_translate.dart';
 import 'package:cubipool2/modules/profile/domain/entities/reservation.dart';
 
 class AssistanceDetailPage extends StatefulWidget {
@@ -26,7 +27,7 @@ class _AssistanceDetailPageState extends State<AssistanceDetailPage> {
     final endHour = hourFormatter.format(assistance.endDateTime);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Detalle de la asistancia')),
+      appBar: AppBar(title: Text('Detalle de la asistencia')),
       body: SafeArea(
         child: Center(
           child: Column(
@@ -65,7 +66,8 @@ class _AssistanceDetailPageState extends State<AssistanceDetailPage> {
                 children: [
                   Icon(Icons.library_books_rounded),
                   const SizedBox(width: 8),
-                  Text(assistance.type),
+                  Text(ReservationStatusTranslate.getTranslation(
+                      assistance.type)),
                 ],
               ),
               const SizedBox(height: 16),
