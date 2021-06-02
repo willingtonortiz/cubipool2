@@ -38,8 +38,7 @@ class SearchAllReservations
         final parsedValues = values.map(
           (e) {
             final startHour = DateTime.parse(e.startTime).toLocal();
-            final endHour =
-                DateTime.parse(e.startTime).add(Duration(hours: 2)).toLocal();
+            final endHour = DateTime.parse(e.endTime).toLocal();
 
             return Reservation(
               cubicleId: e.cubicleId,

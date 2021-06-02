@@ -1,4 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:supercharged/supercharged.dart';
 
 import 'package:cubipool2/core/error/failures.dart';
 import 'package:cubipool2/core/usecases/usecase.dart';
@@ -75,12 +76,12 @@ class ReservationNotifier extends StateNotifier<SearchReservationsState> {
       ),
     );
 
-    reservationsEither.fold(
+    state = reservationsEither.fold(
       _mapFailureToMessage,
-      (reservations) {
-        state = ReservationsFoundState(reservations);
-      },
+      (x) => ReservationsFoundState(x),
     );
+    await 1.seconds.delay;
+    getInitialData();
   }
 
   ErrorState _mapFailureToMessage(Failure failure) {

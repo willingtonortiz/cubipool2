@@ -23,8 +23,7 @@ class ReservationsRepositoryImpl implements ReservationsRepository {
       BASE_HOST,
       '/campuses/$campusId/cubicles/available',
       {
-        "campusId": campusId,
-        "startHour": startHourUtc,
+        "startTime": startHourUtc,
         "hours": "$hoursCount",
       },
     );
@@ -57,6 +56,7 @@ class ReservationsRepositoryImpl implements ReservationsRepository {
   }) async {
     final url = Uri.parse('$BASE_URL/reservations');
     final token = await JwtService.getToken();
+
     final response = await http.post(
       url,
       headers: {'Authorization': 'Bearer $token'},
@@ -66,9 +66,6 @@ class ReservationsRepositoryImpl implements ReservationsRepository {
         "endTime": endTime.toUtc().toIso8601String()
       },
     );
-
-    print(startTime.toUtc().toIso8601String());
-    print(endTime.toUtc().toIso8601String());
 
     if (response.statusCode != HttpStatus.created) {
       final responseError = ServerFailure.fromMap(
