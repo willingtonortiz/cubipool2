@@ -1,9 +1,16 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:cubipool2/core/configuration/constants.dart';
+import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
+import 'package:cubipool2/modules/auth/services/jwt_service.dart';
 import 'package:cubipool2/modules/search/domain/entities/campus.dart';
 import 'package:cubipool2/modules/search/domain/entities/publication.dart';
 import 'package:cubipool2/shared/widgets/async_confirmation_dialog.dart';
 import 'package:cubipool2/shared/widgets/notification_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class PublicationDetailPage extends StatelessWidget {
   final Publication publication;
@@ -70,7 +77,7 @@ class PublicationDetailPage extends StatelessWidget {
                     child: Text(publication.description)),
               ),
               Spacer(),
-              _buildReservationButton(context),
+              _buildReservationButton(context, publication),
               Spacer(),
             ],
           ),
@@ -79,7 +86,8 @@ class PublicationDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildReservationButton(BuildContext context) {
+  Widget _buildReservationButton(
+      BuildContext context, Publication publication) {
     return ElevatedButton(
       onPressed: () async {
         bool isJoinSuccessful = false;
@@ -88,7 +96,22 @@ class PublicationDetailPage extends StatelessWidget {
           title: 'Confirmación de Asistencia',
           content: '¿Estás seguro que quieres asistir a este cubículo?',
           onOk: () async {
-            // TODO
+            final url = Uri.https(BASE_HOST, '/publications/join');
+            final token = await JwtService.getToken();
+            final response = await http.post(url, headers: {
+              'Authorization': 'Bearer $token'
+            }, body: {
+              "userId": (await AuthHttpService.getUserName())!,
+              "reservationId": publication,
+              "publicationId": publication,
+            });
+
+            if (response.statusCode != HttpStatus.created) {
+              var errors = jsonDecode(response.body);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(errors['errors'][0])),
+              );
+            }
           },
           onCancel: () async => hasCancelled = true,
         );
