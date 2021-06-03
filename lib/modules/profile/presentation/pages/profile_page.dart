@@ -1,4 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:cubipool2/core/configuration/constants.dart';
+import 'package:cubipool2/core/constants/user_reservation_role.dart';
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
+import 'package:cubipool2/modules/profile/domain/entities/user.dart';
 import 'package:cubipool2/modules/profile/presentation/pages/my_assistance_page.dart';
 import 'package:cubipool2/modules/profile/presentation/widgets/profile_option.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +13,7 @@ import 'package:cubipool2/shared/pages/qr_code_scanner_page.dart';
 import 'package:cubipool2/shared/pages/qr_code_viewer_page.dart';
 import 'package:cubipool2/modules/auth/pages/login_page.dart';
 import 'package:cubipool2/modules/auth/services/jwt_service.dart';
-
+import 'package:http/http.dart' as http;
 import 'my_reservations_page.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -19,6 +25,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late User user;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,9 +52,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   backgroundColor: Colors.grey,
                 ),
                 SizedBox(height: 10.0),
-                Text('Name'),
-                Text('Username'),
-                Text('Points'),
+                Text(user.studentCode),
+                Text(user.points.toString()),
               ],
             ),
           ),
@@ -114,5 +121,30 @@ class _ProfilePageState extends State<ProfilePage> {
       context,
       MaterialPageRoute(builder: (_) => MyAssistancePage()),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    user = new User(studentCode: '-', points: 0);
+    setUser();
+  }
+
+  Future<void> setUser() async {
+    final url = Uri.https(BASE_HOST, '/users');
+    final token = await JwtService.getToken();
+    final response =
+        await http.get(url, headers: {'Authorization': 'Bearer $token'});
+
+    if (response.statusCode != HttpStatus.ok) {
+      var errors = jsonDecode(response.body);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errors['errors'][0])),
+      );
+    } else {
+      user = User.fromMap(jsonDecode(response.body));
+      print(user);
+      setState(() {});
+    }
   }
 }
