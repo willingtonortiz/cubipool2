@@ -101,9 +101,7 @@ class PublicationDetailPage extends StatelessWidget {
             final response = await http.post(url, headers: {
               'Authorization': 'Bearer $token'
             }, body: {
-              "userId": (await AuthHttpService.getUserName())!,
-              "reservationId": publication,
-              "publicationId": publication,
+              "publicationId": publication.publicationId,
             });
 
             if (response.statusCode != HttpStatus.created) {
@@ -111,6 +109,8 @@ class PublicationDetailPage extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(errors['errors'][0])),
               );
+            } else {
+              isJoinSuccessful = true;
             }
           },
           onCancel: () async => hasCancelled = true,

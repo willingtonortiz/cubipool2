@@ -112,8 +112,6 @@ class _ProfilePageState extends State<ProfilePage> {
         builder: (context) => QRCodeScannerPage(),
       ),
     );
-
-    print(result);
   }
 
   void goToMyAssistancePage() async {
