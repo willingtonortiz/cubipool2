@@ -7,6 +7,5 @@ abstract class PublicationsRepository {
   Future<Either<Failure, List<GetAllPublicationsResponseItem>>>
       getAllPublications({
     required String campusId,
-    required int hoursCount,
   });
 }

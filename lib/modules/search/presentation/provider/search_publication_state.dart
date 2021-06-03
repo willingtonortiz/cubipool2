@@ -58,18 +58,16 @@ class PublicationNotifier extends StateNotifier<SearchPublicationsState> {
 
   Future<void> searchPublications(
     Campus campus,
-    int hoursCount,
   ) async {
     state = LoadingState();
 
-    final reservationsEither = await _searchAllPublications.execute(
+    final publicationsEither = await _searchAllPublications.execute(
       SearchAllPublicationsParams(
         campusId: campus.id,
-        hoursCount: hoursCount,
       ),
     );
 
-    reservationsEither.fold(
+    publicationsEither.fold(
       _mapFailureToMessage,
       (publications) {
         state = PublicationsFoundState(publications);

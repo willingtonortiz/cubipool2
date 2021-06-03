@@ -5,8 +5,6 @@ import 'package:cubipool2/modules/search/presentation/provider/search_publicatio
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-const DEFAULT_RESERVATION_HOURS = [1, 2];
-
 class PublicationPage extends StatefulWidget {
   PublicationPage({Key? key}) : super(key: key);
 
@@ -16,7 +14,6 @@ class PublicationPage extends StatefulWidget {
 
 class _PublicationPageState extends State<PublicationPage> {
   Campus? _selectedCampus;
-  int? _selectedHoursCount;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +42,6 @@ class _PublicationPageState extends State<PublicationPage> {
               builder: (context) => PublicationSearchResultsPage(
                 publications: state.publications,
                 campus: _selectedCampus!,
-                hoursCount: _selectedHoursCount!,
               ),
             ),
           );
@@ -82,8 +78,6 @@ class _PublicationPageState extends State<PublicationPage> {
           Image.asset('assets/logos/books.png'),
           const SizedBox(height: 32.0),
           _buildCampusDropdown(context, state.campus),
-          const SizedBox(height: 16.0),
-          _buildHoursCount(DEFAULT_RESERVATION_HOURS),
           const SizedBox(height: 16.0),
           _buildSearchButton(context),
         ],
@@ -122,46 +116,13 @@ class _PublicationPageState extends State<PublicationPage> {
     );
   }
 
-  Widget _buildHoursCount(List<int> hours) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-      child: Wrap(
-        alignment: WrapAlignment.start,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          Text('Cantidad de horas'),
-          ...hours.map((hour) {
-            return Container(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Radio<int>(
-                      groupValue: _selectedHoursCount,
-                      value: hour,
-                      onChanged: setHoursCount),
-                  Text('$hour'),
-                ],
-              ),
-            );
-          }).toList(),
-        ],
-      ),
-    );
-  }
-
-  void setHoursCount(int? value) {
-    setState(() {
-      _selectedHoursCount = value;
-    });
-  }
-
   Widget _buildSearchButton(BuildContext context) {
     return ElevatedButton(
       onPressed: hasAllOptionsSelected()
           ? () {
               context
                   .read(publicationNotifierProvider)
-                  .searchPublications(_selectedCampus!, _selectedHoursCount!);
+                  .searchPublications(_selectedCampus!);
             }
           : null,
       child: Text('Buscar'),
@@ -169,6 +130,6 @@ class _PublicationPageState extends State<PublicationPage> {
   }
 
   bool hasAllOptionsSelected() {
-    return _selectedCampus != null && _selectedHoursCount != null;
+    return _selectedCampus != null;
   }
 }

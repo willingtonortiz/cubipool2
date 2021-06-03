@@ -7,11 +7,9 @@ import 'package:cubipool2/core/usecases/usecase.dart';
 
 class SearchAllPublicationsParams {
   final String campusId;
-  final int hoursCount;
 
   SearchAllPublicationsParams({
     required this.campusId,
-    required this.hoursCount,
   });
 }
 
@@ -26,7 +24,6 @@ class SearchAllPublications
       SearchAllPublicationsParams params) async {
     final publicationsEither = await _repository.getAllPublications(
       campusId: params.campusId,
-      hoursCount: params.hoursCount,
     );
 
     return publicationsEither.fold(
@@ -35,11 +32,10 @@ class SearchAllPublications
         final parsedValues = values.map(
           (e) {
             final startHour = DateTime.parse(e.startTime).toLocal();
-            final endHour =
-                DateTime.parse(e.startTime).add(Duration(hours: 2)).toLocal();
+            final endHour = DateTime.parse(e.endTime).toLocal();
 
             return Publication(
-              cubicleId: e.cubicleId,
+              publicationId: e.publicationId,
               cubicleCode: e.cubicleCode,
               description: e.description,
               startHour: startHour,

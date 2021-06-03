@@ -10,13 +10,11 @@ import 'publication_detail_page.dart';
 class PublicationSearchResultsPage extends StatelessWidget {
   final List<Publication> publications;
   final Campus campus;
-  final int hoursCount;
 
   const PublicationSearchResultsPage({
     Key? key,
     required this.publications,
     required this.campus,
-    required this.hoursCount,
   }) : super(key: key);
 
   @override

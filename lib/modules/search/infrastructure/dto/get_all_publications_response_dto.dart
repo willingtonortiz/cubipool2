@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 class GetAllPublicationsResponseItem {
-  final String cubicleId;
+  final String publicationId;
   final String cubicleCode;
   final String description;
   final String startTime;
   final String endTime;
 
   GetAllPublicationsResponseItem({
-    required this.cubicleId,
+    required this.publicationId,
     required this.cubicleCode,
     required this.description,
     required this.startTime,
@@ -17,21 +17,21 @@ class GetAllPublicationsResponseItem {
 
   Map<String, dynamic> toMap() {
     return {
-      'cubicleId': cubicleId,
+      'publicationId': publicationId,
       'cubicleCode': cubicleCode,
       'description': description,
-      'startTime': startTime,
-      'endTime': endTime,
+      'publicationStartTime': startTime,
+      'publicationEndTime': endTime,
     };
   }
 
   factory GetAllPublicationsResponseItem.fromMap(Map<String, dynamic> map) {
     return GetAllPublicationsResponseItem(
-      cubicleId: map['cubicleId'],
+      publicationId: map['publicationId'],
       cubicleCode: map['cubicleCode'],
-      description: map['description'],
-      startTime: map['startTime'],
-      endTime: map['endTime'],
+      description: map['publicationDescription'],
+      startTime: map['publicationStartTime'],
+      endTime: map['publicationEndTime'],
     );
   }
 
@@ -42,6 +42,7 @@ class GetAllPublicationsResponseItem {
 
   @override
   String toString() {
-    return 'GetAllPublicationsResponseItem(cubicleId: $cubicleId, cubicleCode: $cubicleCode, description: $description, startTime: $startTime, endTime: $endTime)';
+    return 'GetAllPublicationsResponseItem(publicationId: $publicationId, cubicleCode: $cubicleCode, description: $description, startTime: $startTime, endTime: $endTime)';
   }
 }
+  
