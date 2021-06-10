@@ -1,7 +1,8 @@
-import 'package:cubipool2/modules/profile/domain/usecases/share_cubicle.dart';
 import 'package:get_it/get_it.dart';
 
 // Repositories
+import 'modules/profile/domain/repositories/rewards_repository.dart';
+import 'modules/profile/infrastructure/repositories/rewards_repository_impl.dart';
 import 'modules/profile/domain/repositories/assistance_repository.dart';
 import 'modules/profile/infrastructure/repositories/assistance_repository_impl.dart';
 import 'modules/profile/domain/repositories/cubicles_repository.dart';
@@ -27,6 +28,8 @@ import 'modules/search/domain/usecases/search_all_publications.dart';
 import 'modules/reservation/domain/usecases/get_all_campus.dart';
 import 'modules/reservation/domain/usecases/search_all_reservations.dart';
 import 'modules/reservation/domain/usecases/reserve_cubicle.dart';
+import 'package:cubipool2/modules/profile/domain/usecases/share_cubicle.dart';
+import 'package:cubipool2/modules/profile/domain/usecases/get_available_rewards.dart';
 
 final injector = GetIt.instance;
 
@@ -55,6 +58,9 @@ Future<void> init() async {
   injector.registerLazySingleton<CubiclesRepository>(
     () => CubiclesRepositoryImpl(),
   );
+  injector.registerLazySingleton<RewardsRepository>(
+    () => RewardsRepositoryImpl(),
+  );
 
   // Use cases
   injector.registerLazySingleton(() => GetAllCampus(injector()));
@@ -65,4 +71,5 @@ Future<void> init() async {
   injector.registerLazySingleton(() => GetAllCampusPublications(injector()));
   injector.registerLazySingleton(() => SearchAllPublications(injector()));
   injector.registerLazySingleton(() => ShareCubicle(injector()));
+  injector.registerLazySingleton(() => GetAvailableRewards(injector()));
 }

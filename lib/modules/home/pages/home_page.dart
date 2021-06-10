@@ -1,3 +1,4 @@
+import 'package:cubipool2/modules/profile/presentation/pages/rewards_page.dart';
 import 'package:cubipool2/modules/search/presentation/pages/search_publication_page.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,7 @@ class _HomePageState extends State<HomePage> {
           });
         },
         children: [
-          // MyAssistancePage(),
+          // RewardsPage(),
           ReservationPage(),
           PublicationPage(),
           ProfilePage(),

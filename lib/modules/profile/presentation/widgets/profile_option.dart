@@ -21,10 +21,7 @@ class ProfileOption extends StatelessWidget {
           children: [
             Icon(Icons.crop_square),
             SizedBox(width: 10),
-            Text(
-              title,
-              style: TextStyle(fontSize: 16),
-            ),
+            Text(title, style: TextStyle(fontSize: 16)),
             Spacer(),
             Icon(Icons.arrow_forward_ios),
           ],

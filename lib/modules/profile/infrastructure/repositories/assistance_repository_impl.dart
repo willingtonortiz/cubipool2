@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:cubipool2/core/constants/user_reservation_role.dart';
 import 'package:cubipool2/core/configuration/constants.dart';
 import 'package:cubipool2/core/error/failures.dart';
 import 'package:cubipool2/modules/auth/services/jwt_service.dart';
@@ -58,8 +59,11 @@ class _GetMyAssistanceResponse {
 class AssistanceRepositoryImpl implements AssistanceRepository {
   @override
   Future<Either<Failure, List<Reservation>>> getMyAssistance() async {
-    final uri =
-        Uri.parse('$BASE_URL/reservations/me?userReservationRoles=GUEST');
+    final url =
+        '$BASE_URL/reservations/me?userReservationRoles=${UserReservationRole.GUEST}&userReservationRoles=${UserReservationRole.ACTIVATOR}';
+
+    final uri = Uri.parse(url);
+    // Uri.https(authority, unencodedPath)
 
     final token = await JwtService.getToken();
 

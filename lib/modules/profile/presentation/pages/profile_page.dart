@@ -6,6 +6,7 @@ import 'package:cubipool2/core/constants/user_reservation_role.dart';
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
 import 'package:cubipool2/modules/profile/domain/entities/user.dart';
 import 'package:cubipool2/modules/profile/presentation/pages/my_assistance_page.dart';
+import 'package:cubipool2/modules/profile/presentation/pages/rewards_page.dart';
 import 'package:cubipool2/modules/profile/presentation/widgets/profile_option.dart';
 import 'package:flutter/material.dart';
 
@@ -47,13 +48,10 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             child: Column(
               children: [
-                CircleAvatar(
-                  radius: 60,
-                  backgroundColor: Colors.grey,
-                ),
+                CircleAvatar(radius: 60, backgroundColor: Colors.grey),
                 SizedBox(height: 10.0),
                 Text(user.studentCode),
-                Text(user.points.toString()),
+                Text('${user.points.toString()} puntos'),
               ],
             ),
           ),
@@ -64,28 +62,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 ProfileOption(
                     onTap: goToMyAssistancePage,
                     title: 'Cucículos a los que asistiré'),
-                ProfileOption(onTap: () => {}, title: 'Recompensas'),
+                ProfileOption(onTap: _goToRewardsPage, title: 'Recompensas'),
                 ProfileOption(onTap: () => {}, title: 'Historial de Puntos'),
                 ProfileOption(onTap: showQRCode, title: 'Mostrar código QR'),
-                SizedBox(
-                  height: 20.0,
-                ),
+                SizedBox(height: 20.0),
               ],
             ),
           ),
-          ElevatedButton(
-            onPressed: logout,
-            child: Text('Cerrar sesión'),
-          ),
+          ElevatedButton(onPressed: logout, child: Text('Cerrar sesión')),
         ],
       ),
     );
-  }
-
-  void logout() async {
-    await JwtService.removeToken();
-    await AuthHttpService.removeUserName();
-    Navigator.pushReplacementNamed(context, LoginPage.PAGE_ROUTE);
   }
 
   void showMyReservations() async {
@@ -100,13 +87,13 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QRCodeViewerPage(data: userName),
+        builder: (_) => QRCodeViewerPage(data: userName),
       ),
     );
   }
 
   void scanQRCode() async {
-    final result = await Navigator.push<String>(
+    await Navigator.push<String>(
       context,
       MaterialPageRoute(
         builder: (context) => QRCodeScannerPage(),
@@ -118,6 +105,13 @@ class _ProfilePageState extends State<ProfilePage> {
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => MyAssistancePage()),
+    );
+  }
+
+  void _goToRewardsPage() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => RewardsPage()),
     );
   }
 
@@ -144,5 +138,11 @@ class _ProfilePageState extends State<ProfilePage> {
       print(user);
       setState(() {});
     }
+  }
+
+  void logout() async {
+    await JwtService.removeToken();
+    await AuthHttpService.removeUserName();
+    Navigator.pushReplacementNamed(context, LoginPage.PAGE_ROUTE);
   }
 }

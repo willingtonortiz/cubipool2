@@ -32,6 +32,7 @@ class GetMyAssistance implements UseCase<GetMyAssistanceResult, NoParams> {
   Either<Failure, GetMyAssistanceResult> getAssistanceResult(
     List<Reservation> assists,
   ) {
+    print(assists);
     final mappedAssists = mapDatesToLocal(assists);
     final selected = findSharedAssistance(mappedAssists);
     final filteredAssistance = filterSelectedAssist(mappedAssists, selected);
