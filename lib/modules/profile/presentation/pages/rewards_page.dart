@@ -105,12 +105,8 @@ class _RewardsPageState extends State<RewardsPage> {
   }
 
   Widget _buildRewardCard(Reward reward) {
-    // TODO: Ask for image in the rest endpoint
-
     return ListTile(
-      leading: Image.network(
-        'https://fdn2.gsmarena.com/vv/pics/apple/apple-ipad-air-1.jpg',
-      ),
+      leading: Image.network(reward.imageUrl),
       title: RichText(
         text: TextSpan(
           text: '${reward.name} ',

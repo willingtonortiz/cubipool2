@@ -12,12 +12,14 @@ class _Prize {
   final String id;
   final String name;
   final String description;
+  final String imageUrl;
   final int pointsNeeded;
 
   _Prize({
     required this.id,
     required this.name,
     required this.description,
+    required this.imageUrl,
     required this.pointsNeeded,
   });
 
@@ -26,6 +28,7 @@ class _Prize {
       'id': id,
       'name': name,
       'description': description,
+      'imageUrl': imageUrl,
       'pointsNeeded': pointsNeeded,
     };
   }
@@ -35,6 +38,7 @@ class _Prize {
       id: map['id'],
       name: map['name'],
       description: map['description'],
+      imageUrl: map['imageUrl'],
       pointsNeeded: map['pointsNeeded'],
     );
   }
@@ -86,6 +90,7 @@ class RewardsRepositoryImpl implements RewardsRepository {
     );
 
     final decodedBody = jsonDecode(response.body);
+    print(decodedBody);
 
     if (response.statusCode != HttpStatus.ok) {
       final responseError = ServerFailure.fromMap(decodedBody);

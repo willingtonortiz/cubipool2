@@ -3,18 +3,18 @@ class Reward {
   final String name;
   final int points;
   final String description;
-  final String type;
+  final String imageUrl;
 
   Reward({
     required this.id,
     required this.name,
     required this.points,
     required this.description,
-    required this.type,
+    required this.imageUrl,
   });
 
   @override
   String toString() {
-    return 'Reward(id: $id, name: $name, points: $points, description: $description, type: $type)';
+    return 'Reward(id: $id, name: $name, points: $points, description: $description, imageUrl: $imageUrl)';
   }
 }

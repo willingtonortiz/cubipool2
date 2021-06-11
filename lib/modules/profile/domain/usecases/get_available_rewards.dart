@@ -31,12 +31,12 @@ class GetAvailableRewards
       final mapped = GetAvailableRewardsOutput(
         availablePoints: data.userAvailablePoints,
         rewards: data.prizes
-            .map((e) => Reward(
-                  id: e.id,
-                  name: e.name,
-                  points: e.pointsNeeded,
-                  description: e.description,
-                  type: 'type',
+            .map((x) => Reward(
+                  id: x.id,
+                  name: x.name,
+                  points: x.pointsNeeded,
+                  description: x.description,
+                  imageUrl: x.imageUrl,
                 ))
             .toList(),
       );
