@@ -88,7 +88,6 @@ class RewardsRepositoryImpl implements RewardsRepository {
     );
 
     final decodedBody = jsonDecode(response.body);
-    print(decodedBody);
 
     if (response.statusCode != HttpStatus.ok) {
       final responseError = ServerFailure.fromMap(decodedBody);

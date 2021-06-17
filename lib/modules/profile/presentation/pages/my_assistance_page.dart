@@ -1,6 +1,6 @@
-import 'package:cubipool2/core/error/failures.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cubipool2/core/error/failures.dart';
 import 'package:cubipool2/core/usecases/usecase.dart';
 import 'package:cubipool2/injection_container.dart';
 import 'package:cubipool2/modules/profile/domain/usecases/get_my_assistance.dart';
@@ -15,14 +15,12 @@ class MyAssistancePage extends StatefulWidget {
 }
 
 class _MyAssistancePageState extends State<MyAssistancePage> {
-  late final GetMyAssistance getMyAssistanceUseCase;
   List<Reservation> items = [];
   Reservation? active;
   bool isLoading = true;
 
   @override
   void initState() {
-    getMyAssistanceUseCase = injector.get<GetMyAssistance>();
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       loadAssistance();
     });
@@ -30,6 +28,7 @@ class _MyAssistancePageState extends State<MyAssistancePage> {
   }
 
   Future<void> loadAssistance() async {
+    final getMyAssistanceUseCase = injector.get<GetMyAssistance>();
     final either = await getMyAssistanceUseCase.execute(NoParams());
 
     setState(() => isLoading = false);
@@ -37,9 +36,11 @@ class _MyAssistancePageState extends State<MyAssistancePage> {
     either.fold(
       (failure) {
         if (failure is ServerFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(failure.firstError),
-          ));
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(
+              content: Text(failure.firstError),
+            ));
         }
       },
       (result) {

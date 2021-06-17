@@ -59,43 +59,44 @@ class _GetMyAssistanceResponse {
 class AssistanceRepositoryImpl implements AssistanceRepository {
   @override
   Future<Either<Failure, List<Reservation>>> getMyAssistance() async {
-    final url =
-        '$BASE_URL/reservations/me?userReservationRoles=${UserReservationRole.GUEST}&userReservationRoles=${UserReservationRole.ACTIVATOR}';
+    try {
+      final url =
+          '$BASE_URL/reservations/me?userReservationRoles=${UserReservationRole.GUEST}&userReservationRoles=${UserReservationRole.ACTIVATOR}';
+      final uri = Uri.parse(url);
+      final token = await JwtService.getToken();
 
-    final uri = Uri.parse(url);
-    // Uri.https(authority, unencodedPath)
+      final response = await http.get(
+        uri,
+        headers: {'Authorization': 'Bearer $token'},
+      );
 
-    final token = await JwtService.getToken();
+      final decodedBody = jsonDecode(response.body);
 
-    final response = await http.get(
-      uri,
-      headers: {'Authorization': 'Bearer $token'},
-    );
+      if (response.statusCode != HttpStatus.ok) {
+        final responseError = ServerFailure.fromMap(decodedBody);
+        return Left(responseError);
+      }
 
-    final decodedBody = jsonDecode(response.body);
+      final data = List<_GetMyAssistanceResponse>.from(
+        decodedBody.map((x) => _GetMyAssistanceResponse.fromMap(x)),
+      );
 
-    if (response.statusCode != HttpStatus.ok) {
-      final responseError = ServerFailure.fromMap(decodedBody);
-      return Left(responseError);
+      final assistance = data
+          .map(
+            (e) => Reservation(
+              campusName: e.campusName,
+              cubicleCode: e.cubicleCode,
+              endDateTime: DateTime.parse(e.endDateTime),
+              startDateTime: DateTime.parse(e.startDateTime),
+              seats: e.seats,
+              id: e.reservationId,
+              type: e.type,
+            ),
+          )
+          .toList();
+      return Right(assistance);
+    } catch (e) {
+      return Left(ServerFailure(['Ocurrió un error, intente más tarde']));
     }
-
-    final data = List<_GetMyAssistanceResponse>.from(
-      decodedBody.map((x) => _GetMyAssistanceResponse.fromMap(x)),
-    );
-
-    final assistance = data
-        .map(
-          (e) => Reservation(
-            campusName: e.campusName,
-            cubicleCode: e.cubicleCode,
-            endDateTime: DateTime.parse(e.endDateTime),
-            startDateTime: DateTime.parse(e.startDateTime),
-            seats: e.seats,
-            id: e.reservationId,
-            type: e.type,
-          ),
-        )
-        .toList();
-    return Right(assistance);
   }
 }

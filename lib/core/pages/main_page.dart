@@ -66,19 +66,11 @@ class _MainPageState extends State<MainPage> {
   }
 
   @override
-  void didUpdateWidget(covariant MainPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    print(oldWidget);
-    print(widget);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: _userFuture,
       builder: (context, AsyncSnapshot<bool> snapshot) {
         final materialApp = _buildMaterialApp(themeData);
-        print(snapshot.connectionState);
 
         if (snapshot.connectionState == ConnectionState.waiting) {
           return materialApp('loading');
