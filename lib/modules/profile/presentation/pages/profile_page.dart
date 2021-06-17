@@ -46,8 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             child: Column(
               children: [
-                CircleAvatar(radius: 60, backgroundColor: Colors.grey),
-                SizedBox(height: 10.0),
+                SizedBox(height: 50.0),
                 Text(user.studentCode),
                 Text('${user.points.toString()} puntos'),
               ],
