@@ -1,20 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:cubipool2/core/configuration/constants.dart';
-import 'package:cubipool2/core/constants/user_reservation_role.dart';
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
 import 'package:cubipool2/modules/profile/domain/entities/user.dart';
 import 'package:cubipool2/modules/profile/presentation/pages/my_assistance_page.dart';
 import 'package:cubipool2/modules/profile/presentation/pages/rewards_page.dart';
 import 'package:cubipool2/modules/profile/presentation/widgets/profile_option.dart';
-import 'package:flutter/material.dart';
-
 import 'package:cubipool2/shared/pages/qr_code_scanner_page.dart';
 import 'package:cubipool2/shared/pages/qr_code_viewer_page.dart';
 import 'package:cubipool2/modules/auth/pages/login_page.dart';
 import 'package:cubipool2/modules/auth/services/jwt_service.dart';
-import 'package:http/http.dart' as http;
 import 'my_reservations_page.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -135,8 +133,9 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     } else {
       user = User.fromMap(jsonDecode(response.body));
-      print(user);
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 

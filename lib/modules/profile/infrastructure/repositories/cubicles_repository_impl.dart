@@ -14,23 +14,27 @@ class CubiclesRepositoryImpl implements CubiclesRepository {
   Future<Either<Failure, bool>> shareCubicle(
     ShareCubicleInfo information,
   ) async {
-    final url = Uri.parse('$BASE_URL/publications');
-    final token = await JwtService.getToken();
-    final response = await http.post(
-      url,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-      body: information.toJson(),
-    );
+    try {
+      final url = Uri.parse('$BASE_URL/publications');
+      final token = await JwtService.getToken();
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: information.toJson(),
+      );
 
-    if (response.statusCode.isNotCreated) {
-      final decoded = jsonDecode(response.body);
-      final responseError = ServerFailure.fromMap(decoded);
-      return Left(responseError);
+      if (response.statusCode.isNotCreated) {
+        final decoded = jsonDecode(response.body);
+        final responseError = ServerFailure.fromMap(decoded);
+        return Left(responseError);
+      }
+
+      return Right(true);
+    } catch (e) {
+      return Left(ServerFailure(['Error inesperado, inténtalo nuevamente']));
     }
-
-    return Right(true);
   }
 }

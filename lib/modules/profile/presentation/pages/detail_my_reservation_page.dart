@@ -268,7 +268,12 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
     Navigator.push<String>(
       context,
       MaterialPageRoute(
-        builder: (_) => ShareCubiclePage(reservation: reservation),
+        builder: (_) => ShareCubiclePage(
+          onSuccess: () {
+            setState(() => type = ReservationStatus.SHARED);
+          },
+          reservation: reservation,
+        ),
       ),
     );
   }

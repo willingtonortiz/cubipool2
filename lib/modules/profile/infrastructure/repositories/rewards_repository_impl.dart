@@ -44,8 +44,6 @@ class _Prize {
   }
 
   String toJson() => json.encode(toMap());
-
-  factory _Prize.fromJson(String source) => _Prize.fromMap(json.decode(source));
 }
 
 class GetAvailableRewardsResponse {

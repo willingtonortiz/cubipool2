@@ -1,17 +1,20 @@
-import 'package:cubipool2/core/error/failures.dart';
-import 'package:cubipool2/injection_container.dart';
-import 'package:cubipool2/modules/profile/domain/usecases/share_cubicle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+import 'package:cubipool2/injection_container.dart';
+import 'package:cubipool2/core/error/failures.dart';
+import 'package:cubipool2/modules/profile/domain/usecases/share_cubicle.dart';
 import 'package:cubipool2/shared/widgets/notification_dialog.dart';
 import 'package:cubipool2/modules/profile/domain/entities/reservation.dart';
 
 class ShareCubiclePage extends StatefulWidget {
   final Reservation reservation;
+  final VoidCallback onSuccess;
 
   ShareCubiclePage({
     Key? key,
     required this.reservation,
+    required this.onSuccess,
   }) : super(key: key);
 
   @override
@@ -86,6 +89,9 @@ class _ShareCubiclePageState extends State<ShareCubiclePage> {
 
   Widget _buildDescriptionInput() {
     return TextFormField(
+      inputFormatters: [
+        new LengthLimitingTextInputFormatter(256),
+      ],
       controller: descriptionController,
       keyboardType: TextInputType.multiline,
       minLines: 5,
@@ -120,15 +126,15 @@ class _ShareCubiclePageState extends State<ShareCubiclePage> {
         setState(() => _isLoading = false);
 
         either.fold(
-          (l) {
-            if (l is ServerFailure) {
-              showSharedCubicleFailureSnackbar(context, l.firstError);
+          (failure) {
+            if (failure is ServerFailure) {
+              showSharedCubicleFailureSnackbar(context, failure.firstError);
             }
           },
           (r) => showSharedCubicleDialog(context),
         );
       },
-      child: Text('Publicar'),
+      child: const Text('Publicar'),
     );
   }
 
@@ -145,6 +151,7 @@ class _ShareCubiclePageState extends State<ShareCubiclePage> {
       okText: 'Entiendo',
       onOk: () async {
         Navigator.of(context).pop();
+        widget.onSuccess();
       },
     );
 

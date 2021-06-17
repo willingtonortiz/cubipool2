@@ -1,16 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:cubipool2/core/configuration/constants.dart';
-import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
 import 'package:cubipool2/modules/auth/services/jwt_service.dart';
 import 'package:cubipool2/modules/search/domain/entities/campus.dart';
 import 'package:cubipool2/modules/search/domain/entities/publication.dart';
 import 'package:cubipool2/shared/widgets/async_confirmation_dialog.dart';
 import 'package:cubipool2/shared/widgets/notification_dialog.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class PublicationDetailPage extends StatelessWidget {
   final Publication publication;

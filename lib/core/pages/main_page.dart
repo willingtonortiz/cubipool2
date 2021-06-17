@@ -9,50 +9,76 @@ import 'package:cubipool2/modules/auth/pages/register_page.dart';
 import 'package:cubipool2/modules/home/pages/home_page.dart';
 import 'package:cubipool2/shared/pages/not_found_page.dart';
 
-class MainPage extends StatelessWidget {
+const APP_TITLE = 'CUBIPOOL';
+const PRIMARY_COLOR = Colors.red;
+final acceptColor = PRIMARY_COLOR[700];
+final themeData = ThemeData(
+  primaryColor: PRIMARY_COLOR,
+  accentColor: acceptColor,
+  appBarTheme: AppBarTheme(
+    centerTitle: true,
+  ),
+  textTheme: TextTheme(
+    bodyText2: TextStyle(fontSize: 14.0),
+  ),
+  snackBarTheme: SnackBarThemeData(
+    backgroundColor: PRIMARY_COLOR,
+    behavior: SnackBarBehavior.floating,
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      primary: PRIMARY_COLOR,
+      onPrimary: Colors.white,
+      padding: EdgeInsets.symmetric(
+        horizontal: 18.0,
+        vertical: 12.0,
+      ),
+      textStyle: TextStyle(
+        fontSize: 18.0,
+      ),
+    ),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(primary: PRIMARY_COLOR),
+  ),
+  outlinedButtonTheme: OutlinedButtonThemeData(
+    style: OutlinedButton.styleFrom(primary: PRIMARY_COLOR),
+  ),
+);
+
+class MainPage extends StatefulWidget {
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  late Future<bool> _userFuture;
+
+  Future<bool> checkIfUserIsLoggedIn() async {
+    final token = await JwtService.getToken();
+    return token != null;
+  }
+
+  @override
+  void initState() {
+    _userFuture = checkIfUserIsLoggedIn();
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant MainPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print(oldWidget);
+    print(widget);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'CUBIPOOL';
-    final primaryColor = Colors.red;
-    final accentColor = primaryColor[700];
-    final themeData = ThemeData(
-      primaryColor: primaryColor,
-      accentColor: accentColor,
-      appBarTheme: AppBarTheme(
-        centerTitle: true,
-      ),
-      textTheme: TextTheme(
-        bodyText2: TextStyle(fontSize: 14.0),
-      ),
-      snackBarTheme: SnackBarThemeData(
-        backgroundColor: primaryColor,
-        behavior: SnackBarBehavior.floating,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          primary: primaryColor,
-          onPrimary: Colors.white,
-          padding: EdgeInsets.symmetric(
-            horizontal: 18.0,
-            vertical: 12.0,
-          ),
-          textStyle: TextStyle(
-            fontSize: 18.0,
-          ),
-        ),
-      ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(primary: primaryColor),
-      ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(primary: primaryColor),
-      ),
-    );
-
     return FutureBuilder(
-      future: checkIfUserIsLoggedIn(),
+      future: _userFuture,
       builder: (context, AsyncSnapshot<bool> snapshot) {
-        final materialApp = _buildMaterialApp(appTitle, themeData);
+        final materialApp = _buildMaterialApp(themeData);
+        print(snapshot.connectionState);
 
         if (snapshot.connectionState == ConnectionState.waiting) {
           return materialApp('loading');
@@ -70,13 +96,12 @@ class MainPage extends StatelessWidget {
   }
 
   MaterialApp Function(String initialPage) _buildMaterialApp(
-    String appTitle,
     ThemeData themeData,
   ) =>
       (String initialPage) {
         return MaterialApp(
-          key: UniqueKey(),
-          title: appTitle,
+          key: Key(initialPage),
+          title: APP_TITLE,
           debugShowCheckedModeBanner: false,
           theme: themeData,
           initialRoute: initialPage,
@@ -94,9 +119,4 @@ class MainPage extends StatelessWidget {
           },
         );
       };
-
-  Future<bool> checkIfUserIsLoggedIn() async {
-    final token = await JwtService.getToken();
-    return token != null;
-  }
 }
