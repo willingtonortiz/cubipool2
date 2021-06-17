@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cubipool2/core/constants/reservation_status.dart';
 import 'package:cubipool2/core/utils/reservation_status_translate.dart';
+import 'package:cubipool2/shared/widgets/async_confirmation_dialog.dart';
+import 'package:cubipool2/shared/widgets/notification_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -144,12 +146,26 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
                 ),
                 const SizedBox(height: 32.0),
                 _buildActivationButton(context, reservation),
+                SizedBox(height: 10.0),
+                _buildCancelReservationButton(context, reservation),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildCancelReservationButton(
+      BuildContext context, Reservation reservation) {
+    if (reservation.type == ReservationStatus.NOT_ACTIVE) {
+      return ElevatedButton(
+        onPressed: _cancelReservation,
+        style: ElevatedButton.styleFrom(primary: Colors.red),
+        child: Text('Cancelar reserva'),
+      );
+    }
+    return SizedBox();
   }
 
   Widget _buildActivationButton(BuildContext context, Reservation reservation) {
@@ -208,6 +224,43 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
     String twoDigitSeconds =
         twoDigits(activationPeriodEnd.inSeconds.remainder(60));
     return '$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds';
+  }
+
+  void _cancelReservation() async {
+    bool isCancelSuccessful = false;
+    bool hasCancelled = false;
+    final dialog = AsyncConfirmationDialog(
+      title: 'Cancelación de Reserva',
+      content: '¿Estás seguro que quieres cancelar esta reserva?',
+      onOk: () async {},
+      onCancel: () async => hasCancelled = true,
+    );
+    await showDialog(
+      context: context,
+      builder: (context) => dialog,
+      barrierDismissible: false,
+    );
+    if (hasCancelled) {
+      return;
+    }
+
+    final notificationMessage =
+        isCancelSuccessful ? 'Cancelación de Reserva ' : 'Algo salío mal... :c';
+
+    final reserveNotification = NotificationDialog(
+      title: notificationMessage,
+      onOk: () async {
+        if (isCancelSuccessful) {
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        }
+      },
+    );
+    await showDialog(
+      context: context,
+      builder: (context) => reserveNotification,
+      barrierDismissible: false,
+    );
   }
 
   void _activateCubicle() async {

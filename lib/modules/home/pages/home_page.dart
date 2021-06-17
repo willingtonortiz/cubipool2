@@ -29,8 +29,8 @@ class _HomePageState extends State<HomePage> {
           });
         },
         children: [
-          RewardsPage(),
-          // ReservationPage(),
+          //RewardsPage(),
+          ReservationPage(),
           PublicationPage(),
           ProfilePage(),
         ],
