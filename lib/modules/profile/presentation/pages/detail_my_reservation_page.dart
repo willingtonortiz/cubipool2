@@ -232,7 +232,19 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
     final dialog = AsyncConfirmationDialog(
       title: 'Cancelación de Reserva',
       content: '¿Estás seguro que quieres cancelar esta reserva?',
-      onOk: () async {},
+      onOk: () async {
+        final url =
+            Uri.https(BASE_HOST, '/reservations/${widget.reservation.id}');
+        final token = await JwtService.getToken();
+        final response = await http.delete(
+          url,
+          headers: {'Authorization': 'Bearer $token'},
+        );
+
+        if (response.statusCode == HttpStatus.ok) {
+          isCancelSuccessful = true;
+        }
+      },
       onCancel: () async => hasCancelled = true,
     );
     await showDialog(
