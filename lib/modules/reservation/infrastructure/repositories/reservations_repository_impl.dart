@@ -54,25 +54,29 @@ class ReservationsRepositoryImpl implements ReservationsRepository {
     required DateTime startTime,
     required DateTime endTime,
   }) async {
-    final url = Uri.parse('$BASE_URL/reservations');
-    final token = await JwtService.getToken();
+    try {
+      final url = Uri.parse('$BASE_URL/reservations');
+      final token = await JwtService.getToken();
 
-    final response = await http.post(
-      url,
-      headers: {'Authorization': 'Bearer $token'},
-      body: {
-        "cubicleId": cubicleId,
-        "startTime": startTime.toUtc().toIso8601String(),
-        "endTime": endTime.toUtc().toIso8601String()
-      },
-    );
-
-    if (response.statusCode != HttpStatus.created) {
-      final responseError = ServerFailure.fromMap(
-        jsonDecode(response.body),
+      final response = await http.post(
+        url,
+        headers: {'Authorization': 'Bearer $token'},
+        body: {
+          "cubicleId": cubicleId,
+          "startTime": startTime.toUtc().toIso8601String(),
+          "endTime": endTime.toUtc().toIso8601String()
+        },
       );
-      return Left(responseError);
+
+      if (response.statusCode != HttpStatus.created) {
+        final responseError = ServerFailure.fromMap(
+          jsonDecode(response.body),
+        );
+        return Left(responseError);
+      }
+      return Right(null);
+    } catch (e) {
+      return Left(ServerFailure(['Ocurrió un error']));
     }
-    return Right(null);
   }
 }
