@@ -91,7 +91,10 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
       return centeredContainer(Text('No hay reservas para asistir'));
     }
 
-    return ReservationItem(reservation: reservation);
+    return ReservationItem(
+      reservation: reservation,
+      onRefresh: loadReservations,
+    );
   }
 
   Widget _buildFinishedReservations(List<Reservation> reservations) {
@@ -104,8 +107,9 @@ class _MyReservationsPageState extends State<MyReservationsPage> {
         ? Expanded(
             child: ListView.builder(
               itemCount: reservations.length,
-              itemBuilder: (_, index) =>
-                  ReservationItem(reservation: reservations[index]),
+              itemBuilder: (_, index) => ReservationItem(
+                  reservation: reservations[index],
+                  onRefresh: loadReservations),
             ),
           )
         : Text('No cuentas con reservas finalizadas');
