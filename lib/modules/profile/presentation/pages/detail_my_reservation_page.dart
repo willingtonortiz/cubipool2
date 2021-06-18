@@ -184,7 +184,8 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
           isInsideActivationPeriod(reservation.startDateTime);
 
       return ElevatedButton(
-        onPressed: isInActivationPeriod ? _activateCubicle : null,
+        onPressed:
+            isInActivationPeriod ? () => _activateCubicle(context) : null,
         style: ElevatedButton.styleFrom(primary: Colors.green),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -275,14 +276,14 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
     );
   }
 
-  void _activateCubicle() async {
+  void _activateCubicle(BuildContext context) async {
     try {
       late var errors;
 
       var activatorUsername = await Navigator.push<String>(
         context,
         MaterialPageRoute(
-          builder: (context) => QRCodeScannerPage(),
+          builder: (_) => QRCodeScannerPage(),
         ),
       );
       if (activatorUsername != null) {
