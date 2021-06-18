@@ -34,13 +34,11 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
   late Timer _timer;
   late DateTime startDate;
   late bool isReservationNotActive;
-  late String type;
 
   @override
   void initState() {
     super.initState();
     final reservation = widget.reservation;
-    type = widget.reservation.type.toString();
     isReservationNotActive = reservation.isNotActive();
     startDate = reservation.startDateTime;
 
@@ -130,7 +128,8 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
                       children: [
                         Icon(Icons.sticky_note_2_outlined),
                         const SizedBox(width: 8.0),
-                        Text(ReservationStatusTranslate.getTranslation(type)),
+                        Text(ReservationStatusTranslate.getTranslation(
+                            reservation.type)),
                       ],
                     ),
                     const SizedBox(height: 16.0),
@@ -184,8 +183,9 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
           isInsideActivationPeriod(reservation.startDateTime);
 
       return ElevatedButton(
-        onPressed:
-            isInActivationPeriod ? () => _activateCubicle(context) : null,
+        onPressed: isInActivationPeriod
+            ? () => _activateCubicle(context, reservation)
+            : null,
         style: ElevatedButton.styleFrom(primary: Colors.green),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -265,7 +265,6 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
       onOk: () async {
         if (isCancelSuccessful) {
           Navigator.of(context).pop();
-          Navigator.of(context).pop();
         }
       },
     );
@@ -276,7 +275,10 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
     );
   }
 
-  void _activateCubicle(BuildContext context) async {
+  void _activateCubicle(
+    BuildContext context,
+    Reservation reservation,
+  ) async {
     try {
       late var errors;
 
@@ -300,8 +302,15 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
 
         if (response.statusCode != HttpStatus.created) {
           errors = jsonDecode(response.body);
+          var message = '';
+          if (response.statusCode == 500) {
+            message = errors['message'];
+          } else {
+            message = errors['errors'][0];
+          }
+
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(errors['errors'][0])),
+            SnackBar(content: Text(message)),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -310,9 +319,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
               backgroundColor: Colors.green,
             ),
           );
-          setState(() {
-            type = ReservationStatus.ACTIVE;
-          });
+          setState(() => reservation.type = ReservationStatus.ACTIVE);
         }
 
         setState(() {
@@ -336,7 +343,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
       MaterialPageRoute(
         builder: (_) => ShareCubiclePage(
           onSuccess: () {
-            setState(() => type = ReservationStatus.SHARED);
+            setState(() => reservation.type = ReservationStatus.SHARED);
           },
           reservation: reservation,
         ),

@@ -10,7 +10,7 @@ class Reservation {
   final DateTime startDateTime;
   final DateTime endDateTime;
   final int seats;
-  final String type;
+  String type;
 
   Reservation({
     required this.id,

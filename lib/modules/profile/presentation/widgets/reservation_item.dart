@@ -9,9 +9,11 @@ class ReservationItem extends StatelessWidget {
   const ReservationItem({
     Key? key,
     required this.reservation,
+    required this.onRefresh,
   }) : super(key: key);
 
   final Reservation reservation;
+  final VoidCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +24,15 @@ class ReservationItem extends StatelessWidget {
     final endHour = hourFormatter.format(reservation.endDateTime);
 
     return InkWell(
-      onTap: () {
-        Navigator.push<String>(
+      onTap: () async {
+        await Navigator.push<String>(
           context,
           MaterialPageRoute(
             builder: (context) =>
                 DetailMyReservationPage(reservation: reservation),
           ),
         );
+        onRefresh();
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
