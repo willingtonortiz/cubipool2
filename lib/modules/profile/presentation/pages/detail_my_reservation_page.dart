@@ -183,9 +183,8 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
           isInsideActivationPeriod(reservation.startDateTime);
 
       return ElevatedButton(
-        onPressed: isInActivationPeriod
-            ? () => _activateCubicle(context, reservation)
-            : null,
+        onPressed:
+            isInActivationPeriod ? () => _activateCubicle(reservation) : null,
         style: ElevatedButton.styleFrom(primary: Colors.green),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -275,10 +274,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
     );
   }
 
-  void _activateCubicle(
-    BuildContext context,
-    Reservation reservation,
-  ) async {
+  void _activateCubicle(Reservation reservation) async {
     try {
       late var errors;
 
@@ -303,6 +299,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
         if (response.statusCode != HttpStatus.created) {
           errors = jsonDecode(response.body);
           var message = '';
+
           if (response.statusCode == 500) {
             message = errors['message'];
           } else {
@@ -353,7 +350,7 @@ class _DetailMyReservationPaage extends State<DetailMyReservationPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _timer.cancel();
+    super.dispose();
   }
 }
