@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'points_history_page.dart';
 import 'package:cubipool2/core/configuration/constants.dart';
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
 import 'package:cubipool2/modules/profile/domain/entities/user.dart';
@@ -60,7 +61,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     onTap: goToMyAssistancePage,
                     title: 'Cucículos a los que asistiré'),
                 ProfileOption(onTap: _goToRewardsPage, title: 'Recompensas'),
-                ProfileOption(onTap: () => {}, title: 'Historial de Puntos'),
+                ProfileOption(
+                    onTap: _goToPointsHistoryPage,
+                    title: 'Historial de Puntos'),
                 ProfileOption(onTap: showQRCode, title: 'Mostrar código QR'),
                 SizedBox(height: 20.0),
               ],
@@ -109,6 +112,13 @@ class _ProfilePageState extends State<ProfilePage> {
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => RewardsPage()),
+    );
+  }
+
+  void _goToPointsHistoryPage() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => PointsHistoryPage()),
     );
   }
 

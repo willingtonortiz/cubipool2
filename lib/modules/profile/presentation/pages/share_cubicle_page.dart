@@ -22,7 +22,7 @@ class ShareCubiclePage extends StatefulWidget {
 }
 
 class _ShareCubiclePageState extends State<ShareCubiclePage> {
-  final descriptionController = TextEditingController(text: 'a' * 255);
+  final descriptionController = TextEditingController();
   int? _selectedSeats;
   bool _isLoading = false;
 

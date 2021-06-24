@@ -20,6 +20,9 @@ class ResponseError implements Exception {
   }
 
   factory ResponseError.fromMap(Map<String, dynamic> map) {
+    if (!(map['errors'] is List)) {
+      return ResponseError(errors: [map['errors']]);
+    }
     return ResponseError(
       errors: List<String>.from(map['errors']),
     );
