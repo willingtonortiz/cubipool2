@@ -52,22 +52,27 @@ class AuthHttpService {
     return LoginResponseBody.fromMap(jsonDecode(response.body));
   }
 
-  static Future<void> register(
+  static Future<bool> register(
     String username,
     String password,
   ) async {
-    final registerUrl = Uri.parse('$BASE_URL/auth/register');
-    final response = await http.post(
-      registerUrl,
-      body: {
-        "username": username,
-        "password": password,
-      },
-    );
+    try {
+      final registerUrl = Uri.parse('$BASE_URL/auth/register');
+      final response = await http.post(
+        registerUrl,
+        body: {
+          "username": username,
+          "password": password,
+        },
+      );
 
-    if (response.statusCode != HttpStatus.created) {
-      final responseError = ResponseError.fromMap(jsonDecode(response.body));
-      throw responseError;
+      if (response.statusCode != HttpStatus.created) {
+        final responseError = ResponseError.fromMap(jsonDecode(response.body));
+        throw responseError;
+      }
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 

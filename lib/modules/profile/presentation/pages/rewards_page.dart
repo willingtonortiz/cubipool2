@@ -1,3 +1,6 @@
+import 'package:cubipool2/core/error/failures.dart';
+import 'package:cubipool2/modules/profile/domain/usecases/claim_reward.dart';
+import 'package:cubipool2/shared/widgets/async_confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -75,7 +78,7 @@ class _RewardsPageState extends State<RewardsPage> {
             const SizedBox(height: 32),
             if (_isLoading) CircularProgressIndicator(),
             if (_hasFetchDataError) _buildFetchRewardsButton(),
-            Expanded(child: _buildRewards(_rewards)),
+            Expanded(child: _buildRewards(context, _rewards)),
           ],
         ),
       ),
@@ -86,25 +89,29 @@ class _RewardsPageState extends State<RewardsPage> {
     return ElevatedButton(
       child: Text('Volver a cargar'),
       onPressed: () {
-        setState(() {
-          _hasFetchDataError = false;
-        });
+        setState(() => _hasFetchDataError = false);
         _fetchRewards();
       },
     );
   }
 
-  Widget _buildRewards(List<Reward> rewards) {
+  Widget _buildRewards(
+    BuildContext context,
+    List<Reward> rewards,
+  ) {
     return ListView.separated(
       itemCount: rewards.length,
       itemBuilder: (context, index) {
-        return _buildRewardCard(rewards[index]);
+        return _buildRewardCard(context, rewards[index]);
       },
       separatorBuilder: (context, index) => Divider(),
     );
   }
 
-  Widget _buildRewardCard(Reward reward) {
+  Widget _buildRewardCard(
+    BuildContext context,
+    Reward reward,
+  ) {
     return ListTile(
       leading: Image.network(reward.imageUrl),
       title: RichText(
@@ -134,11 +141,57 @@ class _RewardsPageState extends State<RewardsPage> {
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
             ),
             onPressed: () {
-              // TODO: Add actions
+              showDialog(
+                context: context,
+                builder: (context) => _buildConfirmationDialog(reward),
+              );
             },
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildConfirmationDialog(Reward reward) {
+    return AsyncConfirmationDialog(
+      title: 'Confirmación de caje',
+      onOk: () async {
+        final useCase = injector.get<ClaimReward>();
+        final either = await useCase.execute(
+          ClaimRewardParams(
+            reward: reward,
+            availablePoints: _availablePoints,
+          ),
+        );
+
+        either.fold(
+          (failure) {
+            if (failure is ServerFailure) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: Text(failure.firstError),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+            }
+          },
+          (result) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text('La recompensa se ha reclamado con éxito'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+
+            _fetchRewards();
+          },
+        );
+      },
+      onCancel: () async {},
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:cubipool2/shared/models/response_error.dart';
 import 'package:cubipool2/core/utils/username_validator.dart';
 import 'package:cubipool2/modules/auth/services/auth_http_service.dart';
 
@@ -145,9 +144,12 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> registerUser(String username, String password) async {
-    try {
-      await AuthHttpService.register(username, password);
+    final isSuccessful = await AuthHttpService.register(username, password);
+    setState(() {
+      _isLoading = false;
+    });
 
+    if (isSuccessful) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Se ha registrado correctamente'),
@@ -156,12 +158,9 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
       Navigator.of(context).pop();
-    } on ResponseError catch (error) {
-      setState(() {
-        _isLoading = false;
-      });
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error.firstError)),
+        SnackBar(content: Text('Ocurrió un error')),
       );
     }
   }

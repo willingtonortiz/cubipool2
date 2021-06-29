@@ -1,3 +1,4 @@
+import 'package:cubipool2/modules/profile/domain/usecases/claim_reward.dart';
 import 'package:cubipool2/modules/profile/domain/usecases/get_points_history.dart';
 import 'package:get_it/get_it.dart';
 
@@ -79,4 +80,5 @@ Future<void> init() async {
   injector.registerLazySingleton(() => ShareCubicle(injector()));
   injector.registerLazySingleton(() => GetAvailableRewards(injector()));
   injector.registerLazySingleton(() => GetPointsHistory(injector()));
+  injector.registerLazySingleton(() => ClaimReward(injector()));
 }

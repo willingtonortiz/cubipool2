@@ -79,23 +79,49 @@ class RewardsRepositoryImpl implements RewardsRepository {
   @override
   Future<Either<Failure, GetAvailableRewardsResponse>>
       getAvailableRewards() async {
-    final url = '$BASE_URL/prizes';
-    final uri = Uri.parse(url);
-    final token = await JwtService.getToken();
-    final response = await http.get(
-      uri,
-      headers: {'Authorization': 'Bearer $token'},
-    );
+    try {
+      final url = '$BASE_URL/prizes';
+      final uri = Uri.parse(url);
+      final token = await JwtService.getToken();
+      final response = await http.get(
+        uri,
+        headers: {'Authorization': 'Bearer $token'},
+      );
 
-    final decodedBody = jsonDecode(response.body);
+      final decodedBody = jsonDecode(response.body);
 
-    if (response.statusCode != HttpStatus.ok) {
-      final responseError = ServerFailure.fromMap(decodedBody);
-      return Left(responseError);
+      if (response.statusCode != HttpStatus.ok) {
+        final responseError = ServerFailure.fromMap(decodedBody);
+        return Left(responseError);
+      }
+
+      final data = GetAvailableRewardsResponse.fromMap(decodedBody);
+
+      return Right(data);
+    } catch (e) {
+      return Left(ServerFailure(['Ocurrió un error inesperado']));
     }
+  }
 
-    final data = GetAvailableRewardsResponse.fromMap(decodedBody);
+  @override
+  Future<Either<Failure, bool>> claimReward(String rewardId) async {
+    try {
+      final url = Uri.parse('$BASE_URL/prizes/claim/$rewardId');
+      final token = await JwtService.getToken();
+      final response = await http.post(
+        url,
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      print(token);
 
-    return Right(data);
+      if (response.statusCode != HttpStatus.created) {
+        final failure = ServerFailure.fromMap(jsonDecode(response.body));
+        return Left(failure);
+      }
+
+      return Right(true);
+    } catch (e) {
+      return Left(ServerFailure(['Ocurrió un error inesperado']));
+    }
   }
 }
